@@ -230,7 +230,7 @@ class MedicionController extends Controller
             //
             $precio = Precio::all()->toArray();
             $dato['precio_metro'] = $precio[0]['precio_metro'];
-            $dato['cargo_fijo'] = $precio[0]['cargo_fijo'];
+            $dato['cargo_fijo'] = $precio[0]['cargo_fijo']; 
 
 
 
@@ -246,13 +246,10 @@ class MedicionController extends Controller
 
 
 
-            if(count($facturacion)==0){
-               // $dato['lectura'] = $medidor[0]['lectura_inicial'];
-            }
+            
 
 
-
-            if(count($facturacion)>=1){
+            if(!empty($facturacion)){
                 //facturacion actual
                 $dato['consumo'] = $facturacion->consumo;
                 $dato['lectura_actual'] = $facturacion->lectura;
