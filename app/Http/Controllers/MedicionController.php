@@ -224,7 +224,7 @@ class MedicionController extends Controller
             //
             $precio = Precio::all()->toArray();
             $dato['precio_metro'] = $precio[0]['precio_metro'];
-            $dato['cargo_fijo'] = $precio[0]['cargo_fijo'];
+            $dato['cargo_fijo'] = $precio[0]['cargo_fijo']; 
 
 
 
