@@ -210,7 +210,7 @@ class MedicionController extends Controller
 
 
 
-           //dd($graficas);
+           //dd($graficas); 
             $medidor =  DB::table('punto_agua as pt')
                 ->join('cliente as cl','cl.id','=','pt.id_cliente')
                 ->join('medidor as md','md.id','=','pt.id_medidor')
