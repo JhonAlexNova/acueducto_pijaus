@@ -240,13 +240,10 @@ class MedicionController extends Controller
 
 
 
-            if(count($facturacion)==0){
-               // $dato['lectura'] = $medidor[0]['lectura_inicial'];
-            }
+            
 
 
-
-            if(count($facturacion)>=1){
+            if(!empty($facturacion)){
                 //facturacion actual
                 $dato['consumo'] = $facturacion->consumo;
                 $dato['lectura_actual'] = $facturacion->lectura;
@@ -406,7 +403,7 @@ class MedicionController extends Controller
                         //dd($credito);
                 return view('medicion.index', compact('facturas','credito'));
             }else{
-                return view('medicion.index', compact('facturas','credito'));
+                return view('medicion.index');
             }
 
       }else{//si hay un id en la query string
