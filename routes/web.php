@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Hash;
 Route::get('/',function(){
 	return redirect('login');
 	//return view('auth.login');
-});
+}); 
+
+
 
 
 
