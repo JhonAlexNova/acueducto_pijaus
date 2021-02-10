@@ -27,7 +27,7 @@ Route::get('password', function () {
 Auth::routes();
 
 
-Route::group(['prefix'=>'app'],function(){
+Route::group(['prefix'=>'app','middleware'=>'auth'],function(){
 	Route::get('/', 'HomeController@index');
     Route::get('nuevo','ClienteController@nuevo');
 	Route::resource('clientes','ClienteController');

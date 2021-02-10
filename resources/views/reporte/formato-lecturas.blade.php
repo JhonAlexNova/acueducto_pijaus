@@ -51,7 +51,7 @@
 									$mes_actual = date('m');
 
 
-										for ($j = $mes_actual - 2; $j <=$mes_actual ; $j++) {
+										for ($j = 1; $j <=$mes_actual ; $j++) {
 											if($j==$_REQUEST['mes']){
 												echo '<option value="'.$j.'" selected="selected">'.$j.'</option>';
 											}else{
@@ -132,8 +132,9 @@
 								<option>Mes</option>
 								<?php
 								$mes_actual = date('m');
-								$j = $mes_actual - 1;
-									for ($j; $j <=$mes_actual ; $j++) {
+								$j = $mes_actual - 4;
+
+									for ($j = 1; $j <=12 ; $j++) {
 										echo '<option value="'.$j.'">'.$j.'</option>';
 									}
 								 ?>

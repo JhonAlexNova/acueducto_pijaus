@@ -35,7 +35,7 @@ class ReporteController extends Controller
                 }
              }
 
-             dd($mes);
+           
 
             if($reporte==1 || $reporte ==2){
                 if(!empty($_REQUEST['mes'])){
@@ -136,15 +136,24 @@ class ReporteController extends Controller
                 //dd('reporte 3');
                 $dato = array();
                 $formato = array();
-                if(!empty($_REQUEST['mes'])){
-                     if(!empty($_REQUEST['mes'])){
-                        
-                        $medidores = DB::table('medidor as m')
+
+                 $medidores = DB::table('medidor as m')
                         ->join('punto_agua as pt','pt.id_medidor','=','m.id')
                         ->join('cliente as c','c.id','=','pt.id_cliente')
                         ->join('nivel as n','n.id','=','c.id_nivel')
                         ->where('m.estado','=','1')
                         ->select('*','m.id as id_medidor','c.id as codigo_usuario')->get();
+                        // dd($medidores);
+                  //
+
+
+                if(!empty($_REQUEST['mes'])){
+                  //
+
+                     if(!empty($_REQUEST['mes'])){
+                        
+                        
+                       
 
                       //  dd($medidores);
 
@@ -184,10 +193,12 @@ class ReporteController extends Controller
                                     )->get()->last();
 
                                   //  dump($id_medidor);
+                                   // dump($facturacion_total);
 
                                     //llenar campos
-                                   // dd($facturacion_total);
-                                    if(count($facturacion_total)>0){
+                                   // dump($mes.'---'.$anno.'--'.$id_medidor);
+
+                                    if(!empty($facturacion_total)){
                                         if($i==1){
                                             $mes1 =  $facturacion_total->lectura;
                                             //dd($mes1);
@@ -211,7 +222,7 @@ class ReporteController extends Controller
                             
 
 
-                            if(count($facturacion_total)>0){
+                            if(!empty($facturacion_total)){
                                 // dump($facturacion_total);
                                  $dato['codigo_medidor'] = $facturacion_total->id_medidor;
                                  $dato['codigo_usuario'] = $facturacion_total->id_cliente;
@@ -233,9 +244,12 @@ class ReporteController extends Controller
                              $dato['mes2'] = $mes2;
                              $dato['mes3'] = $mes3;
                              $dato['mes4'] = $mes4;
+
                              array_push($formato, $dato);
 
                         }
+
+                       // dd($formato);
 
                       }
 
@@ -618,7 +632,7 @@ class ReporteController extends Controller
                 //dd('hasta aca');
                 return view('reporte.reporte-facturas', compact('consumo','graficas'));
              }
-
+  
 
 
 

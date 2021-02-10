@@ -30,17 +30,11 @@ class MedicionController extends Controller
         $anno = date('yy');
 
           if($mes==0){
-              $anno = $anno - 1;
+              $anno = $anno - 1;   
               $mes = 12;
           }
 
-          if(!empty($_REQUEST['mes'])) {
-                if($mes>=1 && $mes<=9){
-                    $mes = '0'.$_REQUEST['mes']; 
-                }else{
-                  $mes = $_REQUEST['mes'];
-                }
-             }
+          
 
          // dd($mes);
 
@@ -55,7 +49,7 @@ class MedicionController extends Controller
         ->select('fn.id_cliente','fn.otros','fn.id_medidor','f.id as id_factura','c.id','c.nombre','c.nombre','c.primer_apellido','c.segundo_apellido','c.documento','f.periodo','f.ano')->orderBy('fn.id','ASC')->get();
 
 
-        //dd($facturacion_total);
+   // dd($facturacion_total);
 
     // dd($facturacion_total);
 
@@ -79,20 +73,25 @@ class MedicionController extends Controller
 
 
             //otros cobros
-
-
-
             $credito = DB::table('punto_agua as pt')
+            ->join('credito as c','c.id_punto_agua','=','pt.id')
+            ->where('pt.id_medidor','=',$id_medidor)
+            ->where('c.estado','=','1')
+            ->select('*')->get()->count();
+
+
+            if($credito>0){
+                 $credito = DB::table('punto_agua as pt')
                 ->join('credito as c','c.id_punto_agua','=','pt.id')
                 ->where('pt.id_medidor','=',$id_medidor)
                 ->where('c.estado','=','1')
                 ->select('*')->get();
-            if(count($credito)>0){
+
                 $dato['otros_cobros'] = $credito[0]->valor_cuota;
             }else{
               $dato['otros_cobros'] = 0;
             }
-
+            
 
 
             //dd(count($credito));
@@ -588,13 +587,13 @@ class MedicionController extends Controller
 
 
 
-            if(count($facturacion)==0){
+            if(empty($facturacion)==0){
                // $dato['lectura'] = $medidor[0]['lectura_inicial'];
             }
 
 
 
-            if(count($facturacion)>=1){
+            if(!empty($facturacion)){
                 //facturacion actual
                 $dato['consumo'] = $facturacion->consumo;
                 $dato['lectura_actual'] = $facturacion->lectura;
@@ -1038,19 +1037,22 @@ class MedicionController extends Controller
          ->where('fn.id_cliente','=',$cliente->id_cliente)///id_cliebte
         ->select('*')->get()->last();
 
-        
+        //dd($facturas_mes);
 
         
 
-        if(count($facturas_mes)>0){
+        
+
+        if(!empty($facturas_mes)){
             $ultima_fecha = $facturas_mes->created_at;
             $fecha_actual = date('Y-m-d H:i:s');
 
             //
             $dias = (strtotime($ultima_fecha)-strtotime($fecha_actual))/86400;
             $dias = abs($dias); $dias = floor($dias);
+            //dd($dias);
             
-            if($dias<=25){
+            if($dias<=15){
                 Session::flash('alert','Este medidor ya tiene lecturas asignadas en este mes.');
                 return redirect()->back();
 
@@ -1116,7 +1118,7 @@ class MedicionController extends Controller
 
         //dd($otros_cobros);
 
-        if(count($otros_cobros)>0){
+        if(!empty($otros_cobros)){
             $id_credito = $otros_cobros->id;
         }
         Session::put('fecha_lectura',$request->fecha_factura);
@@ -1131,7 +1133,7 @@ class MedicionController extends Controller
         $fecha_facturacion = $anno.'-'.$periodo.'-27';
         $request['fecha_facturacion'] = $fecha_facturacion;
 
-        if($periodo==12){
+        if($periodo>12){
             $periodo = '01';
             $anno = $anno + 1;
         }elseif($periodo<9){
