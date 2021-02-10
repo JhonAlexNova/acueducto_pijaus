@@ -19,6 +19,8 @@ class MedicionController extends Controller
 
     public function generar_factura(){
         //clientes
+
+
       date_default_timezone_set('America/Bogota');
 
 
@@ -34,9 +36,22 @@ class MedicionController extends Controller
               $mes = 12;
           }
 
+<<<<<<< HEAD
           
+=======
 
-         // dd($mes);
+          if(!empty($_REQUEST['mes'])) {
+                if($mes>=1 && $mes<=9){
+                    $mes = '0'.$_REQUEST['mes']; 
+                }else{
+                  $mes = $_REQUEST['mes'];
+                }
+             }
+>>>>>>> d78cf1e95bd82df1e5062d381068231f72cbbad9
+
+          dump($mes);
+          dd($anno);
+
 
 
         $facturacion_total = DB::table('facturacion as fn')
@@ -45,8 +60,9 @@ class MedicionController extends Controller
         ->where('f.estado','=','1')
         //->where('f.periodo','=','03')
         ->where('f.periodo','=',$mes)
-        ->where('f.ano','=',$anno)
+        //->where('f.ano','=',$anno)
         ->select('fn.id_cliente','fn.otros','fn.id_medidor','f.id as id_factura','c.id','c.nombre','c.nombre','c.primer_apellido','c.segundo_apellido','c.documento','f.periodo','f.ano')->orderBy('fn.id','ASC')->get();
+        dd($facturacion_total);
 
 
    // dd($facturacion_total);
@@ -366,19 +382,19 @@ class MedicionController extends Controller
 
       //duplicamos code ?? toca mk
       if(empty($_REQUEST['id_medidor'])){//si el id es nulo o no manda nada retorna los valores lista normal
-
             //dd($_REQUEST['mes']);
             //otros cobros
             if(!empty($_REQUEST['mes'])){//
                // dd('aca');
                 $mes = $_REQUEST['mes'];
-                        if($mes==0){
+                if($mes==0){
 
-                            $mes = 12;
-                        }
-                        if($mes>=1 && $mes<=9){
-                            $mes = '0'.$mes;
-                        }
+                    $mes = 12;
+                }
+                if($mes>=1 && $mes<=9){
+                    $mes = '0'.$mes;
+                }
+
                 $facturas = DB::table('facturacion as fn')
                 ->join('factura as f','f.id','=','fn.id_factura')
                 ->join('cliente as c','c.id','=','fn.id_cliente')
@@ -390,7 +406,7 @@ class MedicionController extends Controller
                 ->join('punto_agua as pt','pt.id','=','cr.id_punto_agua')
                 ->where('cr.estado','=','1')
                 ->select('cr.id as id_credito','cr.valor','cr.estado','cr.valor_cuota','pt.*')->get();
-                   // dd($facturas);
+                   //dd($facturas);
 
                     //   $credito = DB::table('punto_agua as pt')
                     //     ->join('credito as c','c.id_punto_agua','=','pt.id')
@@ -406,6 +422,7 @@ class MedicionController extends Controller
             }
 
       }else{//si hay un id en la query string
+
         //factura actual
       // $clientes_f = Cliente::all();
         // $mes = $_REQUEST['mes'];
@@ -417,6 +434,7 @@ class MedicionController extends Controller
         //     $mes = '0'.$mes;
         // }
         // dd($mes);
+        dd();
         $consumo = array();
         $dato = array();
 
