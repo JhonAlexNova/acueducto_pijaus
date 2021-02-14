@@ -36,9 +36,7 @@ class MedicionController extends Controller
               $mes = 12;
           }
 
-<<<<<<< HEAD
-          
-=======
+
 
           if(!empty($_REQUEST['mes'])) {
                 if($mes>=1 && $mes<=9){
@@ -47,7 +45,7 @@ class MedicionController extends Controller
                   $mes = $_REQUEST['mes'];
                 }
              }
->>>>>>> d78cf1e95bd82df1e5062d381068231f72cbbad9
+
 
           dump($mes);
           dd($anno);
