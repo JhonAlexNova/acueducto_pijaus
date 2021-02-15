@@ -341,20 +341,11 @@
                         <div class="pcoded-inner-navbar main-menu">
                           <div class="sidebar-menu">
                                 <ul class="pcoded-item pcoded-left-item">
-                                    <li class="pcoded-hasmenu">
-                                        
-                                        <ul class="pcoded-submenu">
-                                            <li class=" ">
-                                                <a href="{{ url('./default/menu-rtl.html')}}" target="_blank">
-                                                    <span class="pcoded-mtext">RTL</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    
                                     <li class="">
                                         <a href="{{ url('./default/navbar-light.html')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Dashboard</span>
                                         </a>
                                     </li>
                                      <li class="">

@@ -5,13 +5,8 @@ namespace App\Http\Controllers;
 use App\Factura;
 use Illuminate\Http\Request;
 use App\Http\Requests\FacturaRequest;
-<<<<<<< HEAD
-use Symfony\Component\HttpFoundation\Session\Session;
-use Illuminate\Support\Facades\DB;
-=======
 use Session;
 use DB;
->>>>>>> 808a98abc3454b6873ca92750690fad95459b339
 use App\Cliente;
 use App\Precio;
 use PDF;
@@ -36,18 +31,11 @@ class MedicionController extends Controller
         $mes = $_REQUEST['mes'];
         $anno = date('yy');
 
-<<<<<<< HEAD
-        //   if($mes==0){
-        //       $anno = $anno - 1;   
-        //       $mes = 12;
-        //   }
-=======
           if($mes==0){
               $anno = $anno - 1;   
               $mes = 12;
           }
 
->>>>>>> 808a98abc3454b6873ca92750690fad95459b339
 
 
           if(!empty($_REQUEST['mes'])) {
