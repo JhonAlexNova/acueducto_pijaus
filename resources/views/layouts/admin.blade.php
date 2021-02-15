@@ -351,7 +351,7 @@
                                      <li class="">
                                         <a href="{{ url('./default/navbar-light.html')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Usuarios</span>
                                         </a>
                                     </li>
                                      <li class="">
