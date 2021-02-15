@@ -3,13 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
+=======
+use DB;
+>>>>>>> 808a98abc3454b6873ca92750690fad95459b339
 use App\Medidor;
 use Illuminate\Http\Request;
 use App\Http\Requests\MedidorRequest;
 use App\PuntoAgua;
 use Illuminate\Contracts\Session\Session as SessionSession;
+<<<<<<< HEAD
 use Symfony\Component\HttpFoundation\Session\Session;
+=======
+use Session;
+>>>>>>> 808a98abc3454b6873ca92750690fad95459b339
 
 class MedidorController extends Controller
 {

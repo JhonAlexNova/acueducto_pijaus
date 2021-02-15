@@ -442,7 +442,11 @@
     <style>
      .pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
     /* background-image: linear-gradient(#169ddb, #7cc3f1, #cee0e0); */
+<<<<<<< HEAD
     /* background-image: url('{{ url('img/sidebar.png') }}'); */
+=======
+    background-image: url('{{ url('img/sidebar.png') }}');
+>>>>>>> 808a98abc3454b6873ca92750690fad95459b339
     background-attachment: fixed;
     background-size: contain;
     height: 100% !important;
