@@ -101,8 +101,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="{{ url('#!" onclick="javascript:toggleFullScreen()')}}">
-                                    <i class="feather icon-maximize full-screen"></i>
+                                <a href="{{ url('#!" onclick="javascript:toggleFullScreen();')}}">
+                                    <!-- <i class="feather icon-maximize full-screen"></i> -->
                                 </a>
                             </li>
                         </ul>
@@ -432,58 +432,53 @@
 
     <style>
      .pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
-    /* background-image: linear-gradient(#169ddb, #7cc3f1, #cee0e0); */
-<<<<<<< HEAD
-    /* background-image: url('{{ url('img/sidebar.png') }}'); */
-=======
-    background-image: url('{{ url('img/sidebar.png') }}');
->>>>>>> 808a98abc3454b6873ca92750690fad95459b339
-    background-attachment: fixed;
-    background-size: contain;
-    height: 100% !important;
-    background-position: inherit;
-    background-repeat: no-repeat;
 
-}
+            background-image: url('{{ url('img/sidebar.png') }}');
+            background-attachment: fixed;
+            background-size: contain;
+            height: 100% !important;
+            background-position: inherit;
+            background-repeat: no-repeat;
+         }
 
 
 
-.pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
-    background-color: #169ddb;
-}
-.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item .pcoded-hasmenu .pcoded-submenu li.active>a {
-    color: #dcdcdc;
-    background-color: #ffffff;
-}
-.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.pcoded-trigger.active>a {
-    background: #ffffff;
-    color: #000;
-    border-bottom: 1px #fea3ad solid;
-}
-.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu {
-    background: #ffffff;
-    color: #000 !important;
-}
-.pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu  a{
+        .pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
+            background-color: #169ddb;
+        }
+        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item .pcoded-hasmenu .pcoded-submenu li.active>a {
+            color: #dcdcdc;
+            background-color: #ffffff;
+        }
+        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.pcoded-trigger.active>a {
+            background: #ffffff;
+            color: #000;
+            border-bottom: 1px #fea3ad solid;
+        }
+        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu {
+            background: #ffffff;
+            color: #000 !important;
+        }
+        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu  a{
 
-    color: #000 !important;
-}
+            color: #000 !important;
+        }
 
-.pcoded .pcoded-navbar .pcoded-item {
-    display: block !important;
-    list-style: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    position: relative !important;
-    background: #169ddbb8 !important;
-    height: 100% !important;
-    position: absolute !important;
-    width: 100% !important;
-    height: 5074px !important;
-    top: 0 !important;
-    padding: 88px 0 0 0 !important;
+        .pcoded .pcoded-navbar .pcoded-item {
+            display: block !important;
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
+            background: #169ddbb8 !important;
+            height: 100% !important;
+            position: absolute !important;
+            width: 100% !important;
+            height: 5074px !important;
+            top: 0 !important;
+            padding: 88px 0 0 0 !important;
 
-}
+        }
     </style>
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use Session;
 use App\Nivel;
 use App\Medidor;
@@ -79,24 +79,27 @@ class PuntoAguaController extends Controller
      */
     public function edit($id)
     {
-        //dd($id);
+        // dd($id);
         $cliente_ver = Cliente::findOrfail($id);
         $id_cliente = $cliente_ver->id;
         $id_nivel = $cliente_ver->id_nivel;
-        //dd($id_cliente);
+        // dd($cliente_ver);
+        $nivel = DB::table('nivel as n')
+        ->where('n.id','=',5)
+        ->select('n.tipo')->get();
 
         $puntos = DB::table('punto_agua as pt')
                 ->join('medidor as md','md.id','=','pt.id_medidor')
-                ->join('nivel as n','n.id','=',$id_nivel)
                 ->where('pt.id_cliente','=',$id_cliente)
                 ->where('pt.estado','=','1')
-                ->select('pt.*','md.marca','md.serial','md.id as id_medidor','n.tipo')->get();
+                ->select('pt.*','md.*')->get();
 
-       // dd($puntos);
+    //    dd($puntos,$nivel);
      //  $puntos_disponibles =
      $medidores_disponibles  = DB::table('medidor as m')
         ->where('m.estado','2')->select('*')->get();
-        return view('puntos.index', compact('cliente_ver','puntos','medidores_disponibles'));
+
+        return view('puntos.index', compact('cliente_ver','puntos','medidores_disponibles','nivel'));
     }
 
     /**

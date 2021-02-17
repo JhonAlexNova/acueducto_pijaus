@@ -7,6 +7,7 @@ use App\Cliente;
 use App\Medidor;
 use Illuminate\Http\Request;
 use App\Http\Requests\ClienteRequest;
+use PhpParser\Node\Stmt\Else_;
 use Session;
 
 class ClienteController extends Controller
@@ -51,7 +52,7 @@ class ClienteController extends Controller
          }
 
 
-         //dd($clientes);
+        //  dd($clientes);
         return $clientes;
     }
 
@@ -95,7 +96,7 @@ class ClienteController extends Controller
         ->join('nivel','nivel.id','=','cliente.id_nivel')
         ->where('cliente.estado','=','1')
         ->select('cliente.*','nivel.tipo as tipo')->get();
-        //dd($clientes);
+        // dd($clientes);
         return $clientes;
 
     }
@@ -162,12 +163,12 @@ class ClienteController extends Controller
         Session::put('back',$id);
         $cliente_edit = Cliente::find($id);
         $niveles = Nivel::all();
-        $id_nivel = DB::table('nivel as n')
+        $tipo_nivel = DB::table('nivel as n')
         ->where('n.id','=',$cliente_edit->id_nivel)
         ->select('*')->get();
 
-        //dd($niveles);
-        return view('cliente.edit', compact('cliente_edit','niveles','id_nivel'));
+        //  dd($tipo_nivel);
+        return view('cliente.edit', compact('cliente_edit','niveles','tipo_nivel'));
     }
 
     /**
@@ -180,10 +181,19 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
 
-        //dd($request->all());
+        //   dd($request->all());
+          $id_nivel=(int)$request->id_nivel;
+        // dd($id_nivel);
 
         $cliente = Cliente::findOrfail($cliente->id);
-        $cliente->id_nivel = $request->id_nivel;
+        if ($id_nivel==1 || $id_nivel==2 || $id_nivel==3) {
+            $cliente->id_nivel = $id_nivel;            
+        }elseif ($id_nivel==11 || $id_nivel==4) {
+            $cliente->id_nivel = 4;
+            
+        }elseif ($id_nivel==12 || $id_nivel==5) {
+             $cliente->id_nivel=5;
+        }
         $cliente->nombre = $request->nombre;
         $cliente->primer_apellido = $request->primer_apellido;
         $cliente->segundo_apellido = $request->segundo_apellido;

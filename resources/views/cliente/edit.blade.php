@@ -61,7 +61,7 @@
                             <div class="form-group col-md-6">
                             <label for="inputState">Nivel</label>
                             <select id="inputState" class="form-control" name="id_nivel" required>
-                                <option >{{$id_nivel[0]->tipo}}</option>
+                                <option >{{$tipo_nivel[0]->tipo}}</option>
                                 @foreach($niveles as $n)
                                     <option value="{{$n->id}}"> {{$n->tipo}} </option>
                                 @endforeach
