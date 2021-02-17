@@ -1,45 +1,48 @@
 
 @extends('layouts.admin')
 @section('content')
-    <div class="row">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <a href="{{url('app')}}" class="btn btn-outline-info btn-sm btn-block">Volver</a>
-                </div>
-                <div class="col-md-8"></div>
-                <div class="col-md-2">
-                    <a href="#modal-search" data-toggle="modal" class="btn btn-block btn-outline-success btn-sm" style="font-size: 11px">GENERAR RECIBOS</a>
+
+    <div class="card">
+        <div class="row options">
+            <div class="col-md-12">
+                <div class="alert alert-dismissable" role="alert">
+                        <strong>Advertencia!</strong> Seleccione un un Mes  para generar un listado de facturas.
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-12">
-                        <div class="row">
-                            <div class="col-md-12">
+            <div class="col-md-12">
+                    <form action="" method="get">
+                        <a href="{{url('app')}}" class="btn btn-outline-info btn-sm">Volver</a>
+                        <a href="#modal-search" data-toggle="modal" class="btn  btn-outline-success btn-sm" style="font-size: 11px">GENERAR RECIBOS</a>
+                        <select name="mes" style="border: 1px blue solid;padding: 6px 10px; margin-top: 0px" required="on">
+                            <option>Mes</option>
+                            <?php
+
+                                    for ($i = 1; $i <= 12 ; $i++) {
+                                        if(!empty($_REQUEST['mes'])){
+                                            if($_REQUEST['mes']==$i){
+                                                echo '<option value="'.$i.'" selected="selected">'.$i.'</option>';
+                                                $i= $i +1;
+                                            }
+                                        }
+                                        if($i<=12){echo '<option value="'.$i.'">'.$i.'</option>';}
+                                    }
+                                ?>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary btn-sm" style="margin: -4px 0 0 0">Filtrar</button>
+                        <a href="{{url('app/medicion/create')}}" class="btn btn-outline-info btn-sm">Crear factura</a>
+                    </form>
+            </div>
+            <div class="col-md-12"><br>
+                <div class="modal-footer"></div>
+            </div>
+            
+
+             <div class="col-md-12">
                                 <div class="card text-center">
-                                    <div class="alert alert-dismissable" role="alert">
-                                            <strong>Advertencia!</strong> Seleccione un un Mes  para generar un listado de facturas.
-                                    </div>
 
-                                    <form action="" method="get">
-                                        <select name="mes" style="border: 1px blue solid;padding: 6px 10px; margin-top: 0px" required="on">
-                                            <option>Mes</option>
-                                            <?php
+                                    
 
-                                                    for ($i = 1; $i <= 12 ; $i++) {
-                                                        if(!empty($_REQUEST['mes'])){
-                                                            if($_REQUEST['mes']==$i){
-                                                                echo '<option value="'.$i.'" selected="selected">'.$i.'</option>';
-                                                                $i= $i +1;
-                                                            }
-                                                        }
-                                                        if($i<=12){echo '<option value="'.$i.'">'.$i.'</option>';}
-                                                        
-                                                    }
-                                                ?>
-                                        </select>
-                                        <button type="submit" class="btn btn-outline-primary btn-sm" style="margin: -4px 0 0 0">Filtrar</button>
-                                    </form>
+
                                     @if(!empty($_REQUEST['mes']))
                                         <div class="tabla">
                                             <table class="table table-bordered table-striped" id="tabla-">
@@ -102,12 +105,11 @@
                                         
                                 </div>
                             </div>
-                        </div>
-                </div>
-            </div>
-            
         </div>
     </div>
+
+
+
 
 
     <!--- modal select date ---->

@@ -13,6 +13,7 @@ use PDF;
 use App\Nivel;
 use App\Medidor;
 use App\Facturacion;
+use App\PuntoAgua;
 
 class MedicionController extends Controller
 {
@@ -749,10 +750,13 @@ class MedicionController extends Controller
      */
     public function create()
     {
-       $clientes = new ClienteController();
-        $clientes = $clientes->get_clientes();
+      // $clientes = new ClienteController();
+      //  $clientes = $clientes->get_clientes();
 
-//        dd($clientes);
+        $puntos = PuntoAgua::with(['clientes','medidores'])->where('estado',1)->get();
+
+    //dd($puntos);
+
 
       /* $mediciones = DB::table('cliente as c')
             ->join('facturacion as fn','fn.id_cliente','=','c.id')
@@ -760,7 +764,7 @@ class MedicionController extends Controller
             ->select('c.nombre','c.primer_apellido','c.id as id_cliente','f.lectura','f.fecha_factura','fn.fecha_limite')->get();
            // dd($mediciones);*/
 
-            if(!empty($_REQUEST['buscar'])){
+          /*  if(!empty($_REQUEST['buscar'])){
               $medidores = DB::table('medidor')
               ->where('id','LIKE','%'.$_REQUEST['buscar'].'%')
               ->select('*')->get();
@@ -770,35 +774,32 @@ class MedicionController extends Controller
                ->where('pt.estado','=','1')
                ->select('*')->orderBy('m.id','asc')->get();
              
-            }
+            }*/
 
            //dd($medidores);
 
 
 
+
+
             $dato = array();
             $lecturas = array();
-            foreach ($medidores as $key => $value) {
-             $id_medidor = $value->id;
-             $id_cliente = $value->id_cliente;
+            foreach ($puntos as $key => $value) {
              //ultima medicion
-             $facturacion = DB::table('facturacion as fn')
+            $facturacion = Facturacion::with(['clientes','facturas'])->where('id_medidor',$value->id_medidor)->where('id_cliente',$value->id_cliente)->get()->last();
+            /* $facturacion = DB::table('facturacion as fn')
             ->join('factura as f','f.id','=','fn.id_factura')
              ->join('cliente as c','c.id','=','fn.id_cliente')
             ->join('medidor as m','m.id','=','fn.id_medidor')
             ->join('punto_agua as pt','pt.id_medidor','fn.id_medidor')
-            ->where('fn.id_medidor','=',$id_medidor)
-            ->where('fn.id_cliente','=',$id_cliente)
+            ->where('fn.id_medidor','=',$value->id_medidor)
+            ->where('fn.id_cliente','=',$$value->id_cliente)
             ->where('pt.estado','1')
-            ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get()->last();
-
-
-
-
-
+            ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get()->last();*/
+            dd($value);
             if(empty($facturacion)){
                 //llenar datos cliente medidor
-                $cliente_medidor = DB::table('punto_agua as pt')
+               /* $cliente_medidor = DB::table('punto_agua as pt')
                 ->join('cliente as c','c.id','=','pt.id_cliente')
                 ->where('pt.id_cliente','=',$id_cliente)
                 ->where('pt.estado','=','1')
@@ -814,7 +815,7 @@ class MedicionController extends Controller
                 ->where('fn.id_medidor','=',$id_medidor)
                 ->where('pt.estado','1')
                 ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get()->last();
-
+*/
                 
 
 
