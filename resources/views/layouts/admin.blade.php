@@ -429,7 +429,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
 
     <style>
      .pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
