@@ -343,68 +343,49 @@
                           <div class="sidebar-menu">
                                 <ul class="pcoded-item pcoded-left-item">
                                     
-                                    <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
-                                            <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Dashboard</span>
-                                        </a>
-                                    </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{ url('app/clientes') }}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
                                             <span class="pcoded-mtext">Usuarios</span>
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{url('app/medicion/create')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Lecturas</span>
+                                            <span class="pcoded-mtext">Crear Factura</span>
                                         </a>
                                     </li>
                                      <li class="">
                                         <a href="{{url('app/medicion')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">FACTURAS</span>
+                                            <span class="pcoded-mtext">Ver facturas</span>
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{url('app/pago/create')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Agregar Pagos</span>
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{url('app/pago')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Ver Pagos</span>
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{ url('app/credito') }}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Otros Cobros</span>
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{url('app/reportes')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
+                                            <span class="pcoded-mtext">Reportes</span>
                                         </a>
                                     </li>
-                                     <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
-                                            <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
-                                        </a>
-                                    </li>
-                                     <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
-                                            <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">Navigation</span>
-                                        </a>
-                                    </li>
-
-                                   
+                                                                      
                                 </ul>
                           </div>
                            
@@ -433,11 +414,6 @@
 
     <style>
      .pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
-
-    /* background-image: linear-gradient(#169ddb, #7cc3f1, #cee0e0); */
-    /* background-image: url('{{ url('img/sidebar.png') }}'); */
-
-
             background-image: url('{{ url('img/sidebar.png') }}');
             background-attachment: fixed;
             background-size: contain;
@@ -449,25 +425,26 @@
 
 
         .pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
-            background-color: #169ddb;
+            background-color: #00bcd4;
+            
         }
-        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item .pcoded-hasmenu .pcoded-submenu li.active>a {
+        /* .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item .pcoded-hasmenu .pcoded-submenu li.active>a {
             color: #dcdcdc;
             background-color: #ffffff;
-        }
-        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.pcoded-trigger.active>a {
+        } */
+        /* .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item>li.pcoded-trigger.active>a {
             background: #ffffff;
             color: #000;
             border-bottom: 1px #fea3ad solid;
-        }
-        .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu {
+        } */
+        /* .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu {
             background: #ffffff;
             color: #000 !important;
         }
         .pcoded .pcoded-navbar[navbar-theme="theme1"] .pcoded-item li.pcoded-hasmenu .pcoded-submenu  a{
 
             color: #000 !important;
-        }
+        } */
 
 
         .pcoded .pcoded-navbar .pcoded-item {
@@ -483,12 +460,25 @@
             height: 5074px !important;
             top: 0 !important;
             padding: 88px 0 0 0 !important;
+          
 
         }
-        
+        ul.pcoded-item.pcoded-left-item li{
+            margin-top: 25px !important;
+            border-radius: 45px;
+            border-bottom: 1px #fea3ad solid;
+            border-right: 1px #fea3ad solid;
+        }
+        .pcoded[nav-type="st6"] .pcoded-item.pcoded-left-item>li>a>.pcoded-micon i {
+            color: black !important;
+        }
         ul.pcoded-item.pcoded-left-item li a:hover {
-    background: rgba(0,0,0,0.2) !important;
-}
+           background: #00bcd4 !important;
+        }
+        ul.pcoded-item.pcoded-left-item li a {
+           color:black !important;
+           
+        }
     </style>
 
 
