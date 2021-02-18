@@ -11,12 +11,12 @@ class PuntoAgua extends Model
 
     public function clientes()
     {
-        return $this->hasMany('App\Cliente');
+        return $this->belongsTo(Cliente::class, 'id_cliente','id');
     }
 
     public function medidores()
     {
-        return $this->hasMany('App\Medidor');
+        return $this->belongsTo(Medidor::class, 'id_medidor','id');
     }
 
 }

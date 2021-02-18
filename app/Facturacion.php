@@ -11,16 +11,16 @@ class Facturacion extends Model
 
     public function clientes()
     {
-        return $this->hasMany('App\Cliente');
+        return $this->belongsTo(Cliente::class, 'id_cliente');
     }
     public function medidores()
     {
-        return $this->hasMany('App\Medidor');
+        return $this->belongsTo(Medidor::class, 'id_medidor');
     }
 
     public function facturas()
     {
-        return $this->hasMany('App\Factura');
+        return $this->belongsTo(Factura::class, 'id_factura');
     }
 
     public function creditos()

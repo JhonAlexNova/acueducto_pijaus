@@ -29,6 +29,7 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('template/assets/css/style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('template/assets/css/jquery.mCustomScrollbar.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
 <body>
@@ -361,9 +362,9 @@
                                         </a>
                                     </li>
                                      <li class="">
-                                        <a href="{{ url('./default/navbar-light.html')}}">
+                                        <a href="{{url('app/medicion')}}">
                                             <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                                            <span class="pcoded-mtext">test</span>
+                                            <span class="pcoded-mtext">FACTURAS</span>
                                         </a>
                                     </li>
                                      <li class="">
@@ -433,6 +434,10 @@
     <style>
      .pcoded .pcoded-navbar[navbar-theme="theme1"] .main-menu {
 
+    /* background-image: linear-gradient(#169ddb, #7cc3f1, #cee0e0); */
+    /* background-image: url('{{ url('img/sidebar.png') }}'); */
+
+
             background-image: url('{{ url('img/sidebar.png') }}');
             background-attachment: fixed;
             background-size: contain;
@@ -464,6 +469,7 @@
             color: #000 !important;
         }
 
+
         .pcoded .pcoded-navbar .pcoded-item {
             display: block !important;
             list-style: none !important;
@@ -479,9 +485,16 @@
             padding: 88px 0 0 0 !important;
 
         }
+        
+        ul.pcoded-item.pcoded-left-item li a:hover {
+    background: rgba(0,0,0,0.2) !important;
+}
     </style>
 
 
+
+
+</style>
 
 
     <!-- Warning Section Ends -->
