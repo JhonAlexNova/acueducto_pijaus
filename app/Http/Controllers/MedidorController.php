@@ -3,21 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\DB;
-=======
 use DB;
->>>>>>> 808a98abc3454b6873ca92750690fad95459b339
 use App\Medidor;
 use Illuminate\Http\Request;
 use App\Http\Requests\MedidorRequest;
 use App\PuntoAgua;
 use Illuminate\Contracts\Session\Session as SessionSession;
-<<<<<<< HEAD
-use Symfony\Component\HttpFoundation\Session\Session;
-=======
-use Session;
->>>>>>> 808a98abc3454b6873ca92750690fad95459b339
+
 
 class MedidorController extends Controller
 {
@@ -68,7 +60,7 @@ class MedidorController extends Controller
      */
     public function show(Medidor $medidor)
     {
-        dd('llegamossss');
+        
     }
 
     /**
@@ -79,6 +71,7 @@ class MedidorController extends Controller
      */
     public function edit($id_medidor)
     {
+        // en esta funcion editamos los datos del medidor asociado al usuario correspondiente
         $puntos = DB::table('punto_agua as pt')
         ->where('pt.id_medidor','=',$id_medidor)
         ->select('*')->get()->toArray();
@@ -86,7 +79,7 @@ class MedidorController extends Controller
         $id_medidor = $puntos[0]->id_medidor;
         $id_cliente = $puntos[0]->id_cliente;
         //dd($id_cliente);
-         Session::put('back',$id_cliente);
+        //  Session::put('back',$id_cliente); no se para que....
          $punto = PuntoAgua::find($id_punto);
         $medidor =  Medidor::find($id_medidor);
         //dd($medidor);
@@ -116,35 +109,37 @@ class MedidorController extends Controller
             $punto->save();
             return back()->with('update_medidor', 'Medidor Actualizado');
         } elseif (!empty($id_medidor)) {//este condicional es para suspender el punto, el medidor, el cliente"en caso que solo tenga un solo punto".
-            //dd($id_medidor);
+            // dd($id_medidor);
             //consultamos el punto de agua y verificamos el id del cliente y el id del punto de agua
             $puntos = DB::table('punto_agua as pt')
             ->where('pt.id_medidor','=',$id_medidor)
             ->where('pt.estado','=','1')
-            ->select('pt.id_cliente','pt.id as id_punto')->get()->toArray();
+            ->select('pt.id_cliente','pt.id as id_punto','pt.*')->get();
+            // dd($puntos);
             $id_cliente = $puntos[0]->id_cliente;
             $id_punto = $puntos[0]->id_punto;
+            // dd($id_cliente);
             //verificamos la cantidad de puntos que tiene el cliente.
             $punto_agua = DB::table('punto_agua as pt')
             ->where('pt.id_cliente','=',$id_cliente)
             ->where('pt.estado','=','1')
             ->select('pt.*')->get()->toArray();
 
-
+            // dd($punto_agua);
 
             $total_puntos = count($punto_agua);//hacemos un conteo de los puntos
-           // dd($total_puntos);
+            // dd($total_puntos);
             //
             //traemos la ultima factura de este punto de agua y verificamos si esta cancelada "estado2"
             $factura = DB::table('facturacion as fn')
             ->join('factura as fc','fc.id','=','fn.id_factura')
             ->where('fn.id_medidor','=',$id_medidor)
-            ->select('fc.*')->get()->last();
+            ->select('*')->get()->last();
 
-            //verificar si tiene ftacturas el medidor
+            //verificar si tiene facturas pendientes el medidor antes de suspender de este cliente
 
             // $id_factura = $factura->id;
-            //dd($factura);
+            dd($factura);
             if(count($factura)>0){
                 $estado_factura = $factura->estado;
             }else{

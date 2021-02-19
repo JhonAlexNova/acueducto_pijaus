@@ -27,7 +27,7 @@
                             <span>|</span>
                         </div>
                         <div class="">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Subir</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Actualizar</button>
                         </div>
                     </div>
 

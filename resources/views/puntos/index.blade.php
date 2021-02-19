@@ -30,13 +30,13 @@
                 <li class="d-inline p-2 bg-ligth border-bottom">Segundo Apellido: <ul>{{$cliente_ver->segundo_apellido}}</ul></li>
                 <li class="d-inline p-2 bg-white border-bottom">Documento: <ul>{{$cliente_ver->documento}}</ul></li>
                 <li class="d-inline p-2 bg-ligth border-bottom">Celular <ul>{{$cliente_ver->telefono}}</ul></li>
-                <li class="d-inline p-2 bg-white border-bottom">Nivel <ul></ul></li>
+                <li class="d-inline p-2 bg-white border-bottom">Nivel <ul>{{$nivel[0]->tipo}}</ul></li>
             </ul>
 
         </div>
         <div class="col-6 border" >
             <div class="table-responsive">
-                <button style="margin-left:420px; margin-top:20px" class="btn  btn-outline-success btn-sm" data-toggle="modal" data-target="#medidor">Agregar</button>
+                <button style="margin-left:420px; margin-top:20px" class="btn  btn-outline-success btn-sm" data-toggle="modal" data-target="#medidor">Nuevo Punto</button>
 				<table class="table table-bordered table-striped" id="myTable">
 					<thead>
 
@@ -57,8 +57,8 @@
                                 <td>{{$punto->marca}}</td>
                                 <td>{{$punto->serial}}</td>
                                 <td><a href="{{route('medidor.edit',$punto->id_medidor)}}" class="btn  btn-outline-warning btn-sm">Editar</a></td>
-                            <td><button style="" onclick="suspender('{{$punto->id_medidor}}')" class="btn  btn-outline-dark btn-sm">Suspender</button></td>
-                                {{-- <td><a href="" class="btn  btn-outline-dark btn-sm">Suspender</a></td> --}}
+                                <td><button style="" onclick="suspender('{{$punto->id_medidor}}')" class="btn  btn-outline-dark btn-sm">Suspender</button></td>
+                                <!-- {{-- <td><a href="" class="btn  btn-outline-dark btn-sm">Suspender</a></td> --}} -->
 						    </tr>
                         @endforeach
 
@@ -103,8 +103,8 @@
                             <input type="hidden" name="id_medidor">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" >Aceptar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-danger" >SI</button>
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
 
                                         <div class="col-md-12 parte2">
                                             <label for="">Zona</label>
-                                             <input type="text" class="form-control text-capitalize" name="zona_x" >
+                                             <input type="text" class="form-control text-capitalize" name="zona_x" require>
                                         </div>
                                     </div>
                             </div>
