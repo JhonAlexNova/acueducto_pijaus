@@ -21,7 +21,7 @@
 
                         <div class="row align-items-center justify-content-center">
                             <div class="">
-                                <button class="btn btn-outline-info btn-sm"><a href="{{url('app/punto')}}/{{Session::get('back')}}/edit" >Volver</a></button>
+                                <button class="btn btn-outline-info btn-sm"><a href="{{url('app/punto')}}/{{$punto->id_cliente}}/edit" >Volver</a></button>
                         </div>
                         <div style="text-align: center; width:15px">
                             <span>|</span>

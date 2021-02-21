@@ -78,11 +78,10 @@ class MedidorController extends Controller
         $id_punto = $puntos[0]->id;
         $id_medidor = $puntos[0]->id_medidor;
         $id_cliente = $puntos[0]->id_cliente;
-        //dd($id_cliente);
-        //  Session::put('back',$id_cliente); no se para que....
+        // dd($id_cliente);
          $punto = PuntoAgua::find($id_punto);
         $medidor =  Medidor::find($id_medidor);
-        //dd($medidor);
+        // dd($punto);
 
         return view('puntos.medidor.edit', compact('medidor','punto'));
     }
@@ -134,13 +133,13 @@ class MedidorController extends Controller
             $factura = DB::table('facturacion as fn')
             ->join('factura as fc','fc.id','=','fn.id_factura')
             ->where('fn.id_medidor','=',$id_medidor)
-            ->select('*')->get()->last();
+            ->select('*','fc.estado as estado_factura')->get()->last();
 
             //verificar si tiene facturas pendientes el medidor antes de suspender de este cliente
-
+            
             // $id_factura = $factura->id;
-            dd($factura);
-            if(count($factura)>0){
+            // dd($factura);
+            if(!empty($factura)){
                 $estado_factura = $factura->estado;
             }else{
                 $estado_factura = null;
