@@ -19,9 +19,7 @@ class PrecioController extends Controller
     }
 
     public function get_precio(){
-        $precio = DB::table('precio')
-        ->where('estado','=',2)
-        ->select('*')->get()->toArray();
+        $precio = Precio::get()->last();
         return $precio;
     }
 

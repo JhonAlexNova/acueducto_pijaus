@@ -1,0 +1,2 @@
+#asignar fechas de pago en ultima facturacion que no salio
+UPDATE factura SET fecha_pago = '2121-02-07' WHERE fecha_factura = '2121-01-28'; 

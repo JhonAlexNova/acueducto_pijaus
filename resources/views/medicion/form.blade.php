@@ -10,14 +10,7 @@
           </button>
         </div>
         <div class="modal-body">
-          @if(count($errors)>0)
-           <?php echo "<script> window.onload = function(){ toastr.error('¡Error! reviza y luego intenta nuevamente.'); $('#form-create').modal('show'); }</script>";?>
-              <p class="alert alert-danger">
-                  @foreach ($errors->all() as $e)
-                      <span> {{$e}} </span><br>
-                  @endforeach
-              </p>
-          @endif
+          
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">

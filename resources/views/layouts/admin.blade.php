@@ -24,12 +24,15 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{{ asset('template/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+
     <!-- feather Awesome -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('template/assets/icon/feather/css/feather.css')}}">
+    <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('template/assets/css/style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('template/assets/css/jquery.mCustomScrollbar.css')}}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <script type="text/javascript" src="{{ asset('template/bower_components/jquery/dist/jquery.min.js')}}"></script>
 </head>
 
 <body>
@@ -83,7 +86,7 @@
                             <i class="feather icon-menu"></i>
                         </a>
                         <a href="{{ url('index.html')}}">
-                            <img class="img-fluid" src="{{ url('template/assets/images/logo.png')}}" alt="Theme-Logo" />
+                            <img class="img-fluid" src="{{ url('img/logo-horizontal.png')}}" alt="Theme-Logo" />
                         </a>
                         <a class="mobile-options">
                             <i class="feather icon-more-horizontal"></i>
@@ -489,7 +492,7 @@
 
     <!-- Warning Section Ends -->
     <!-- Required Jquery -->
-    <script type="text/javascript" src="{{ asset('template/bower_components/jquery/dist/jquery.min.js')}}"></script>
+    
     <script type="text/javascript" src="{{ asset('template/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('template/bower_components/popper.js/dist/umd/popper.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('template/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
