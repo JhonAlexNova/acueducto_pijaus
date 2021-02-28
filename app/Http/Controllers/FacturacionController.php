@@ -38,7 +38,8 @@ class FacturacionController extends Controller
 
         $precio = new PrecioController();
         $precio = $precio->get_precio();
-        $id_precio = $precio[0]->id;
+        //dd($precio);
+        $id_precio = $precio->id;
        // dd($request->all());
 
 

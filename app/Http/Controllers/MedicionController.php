@@ -14,6 +14,7 @@ use App\Nivel;
 use App\Medidor;
 use App\Facturacion;
 use App\PuntoAgua;
+use Illuminate\Database\Eloquent\Builder;
 
 class MedicionController extends Controller
 {
@@ -750,156 +751,61 @@ class MedicionController extends Controller
      */
     public function create()
     {
-      // $clientes = new ClienteController();
-      //  $clientes = $clientes->get_clientes();
 
         $puntos = PuntoAgua::with(['clientes','medidores'])->where('estado',1)->get();
-
-    //dd($puntos);
-
-
-      /* $mediciones = DB::table('cliente as c')
-            ->join('facturacion as fn','fn.id_cliente','=','c.id')
-            ->join('factura as f','f.id','=','fn.id_factura')
-            ->select('c.nombre','c.primer_apellido','c.id as id_cliente','f.lectura','f.fecha_factura','fn.fecha_limite')->get();
-           // dd($mediciones);*/
-
-          /*  if(!empty($_REQUEST['buscar'])){
-              $medidores = DB::table('medidor')
-              ->where('id','LIKE','%'.$_REQUEST['buscar'].'%')
-              ->select('*')->get();
-            }else{
-               $medidores = DB::table('punto_agua as pt')
-               ->join('medidor as m','m.id','=','pt.id_medidor')
-               ->where('pt.estado','=','1')
-               ->select('*')->orderBy('m.id','asc')->get();
-             
-            }*/
-
-           //dd($medidores);
-
-
-
 
 
             $dato = array();
             $lecturas = array();
-            foreach ($puntos as $key => $value) {
+            foreach ($puntos as $key => $punto) {
+        
              //ultima medicion
-            $facturacion = Facturacion::with(['clientes','facturas'])->where('id_medidor',$value->id_medidor)->where('id_cliente',$value->id_cliente)->get()->last();
-            /* $facturacion = DB::table('facturacion as fn')
-            ->join('factura as f','f.id','=','fn.id_factura')
-             ->join('cliente as c','c.id','=','fn.id_cliente')
-            ->join('medidor as m','m.id','=','fn.id_medidor')
-            ->join('punto_agua as pt','pt.id_medidor','fn.id_medidor')
-            ->where('fn.id_medidor','=',$value->id_medidor)
-            ->where('fn.id_cliente','=',$$value->id_cliente)
-            ->where('pt.estado','1')
-            ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get()->last();*/
-            dd($value);
-            if(empty($facturacion)){
-                //llenar datos cliente medidor
-               /* $cliente_medidor = DB::table('punto_agua as pt')
-                ->join('cliente as c','c.id','=','pt.id_cliente')
-                ->where('pt.id_cliente','=',$id_cliente)
-                ->where('pt.estado','=','1')
-                ->select('*')->get()->last();
-
-
-                //
-              $facturacion_temporal = DB::table('facturacion as fn')
-                ->join('factura as f','f.id','=','fn.id_factura')
-                 ->join('cliente as c','c.id','=','fn.id_cliente')
-                ->join('medidor as m','m.id','=','fn.id_medidor')
-                ->join('punto_agua as pt','pt.id_medidor','fn.id_medidor')
-                ->where('fn.id_medidor','=',$id_medidor)
-                ->where('pt.estado','1')
-                ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get()->last();
-*/
-                
-
-
-
-
-
-                
+            $facturacion = Facturacion::with(['clientes','facturas'])->where('id_medidor',$punto->id_medidor)->where('id_cliente',$punto->id_cliente)->get();
+            if(!empty($facturacion)){//ultima factura
+                $ultima_facturacion =  $facturacion[count($facturacion) - 1];
             }
 
              $nivel = DB::table('cliente as c')
             ->join('nivel as n','n.id','=','c.id_nivel')
-            ->where('c.id','=',$id_cliente)
-            ->select('*')->get();
+            ->where('c.id','=',$punto->id_cliente)
+            ->select('n.tipo','n.porcentaje','id_nivel')->get();
 
-           // dd($facturacion);
+             $dato['user'] = $ultima_facturacion->clientes;
+             $dato['factura'] = $ultima_facturacion->facturas;
+             $dato['medidor'] = $ultima_facturacion->medidores;
 
-
-            //sql para verificar si el medidor tiene facturas anteriores si la facturacion con el cliente llego en vacio
-             $facturacion_anterior = DB::table('facturacion as fn')
-            ->join('factura as f','f.id','=','fn.id_factura')
-             ->join('cliente as c','c.id','=','fn.id_cliente')
-            ->join('medidor as m','m.id','=','fn.id_medidor')
-            ->where('fn.id_medidor','=',$id_medidor)
-            ->select('fn.id as id_facturacion','fn.*','f.*','c.*')->get();
-
-
-
-            //
-
-            
-            $factura_anterior = count($facturacion_anterior) - 2;
-
-
-
-            if(!empty($facturacion_anterior[$factura_anterior]->lectura)){//
-              $dato['lectura_anterior'] = $facturacion_anterior[$factura_anterior]->lectura;
+            //$facturacion_anterior =Facturacion::with(['clientes','facturas'])->where('id_medidor',$punto->id_medidor)->where('id_cliente',$punto->id_cliente)->get();
+            $index = count($facturacion) - 2;
+            //dd();
+            if(!empty($facturacion[$index]->facturas->lectura)){//el medidor tiene mas de un regitro en la tabla facturacion
+              $dato['factura']['lectura_anterior'] = $facturacion[$index]->facturas->lectura;
             }else{
                 //
-                if(count($facturacion_anterior)==1){
+                if(count($facturacion)==1){
                    $lectura_medidor = Medidor::where('id','=',$id_medidor)->select('*')->get()->last();
-                    $dato['lectura_anterior'] = $lectura_medidor->lectura_inicial;
+                    $dato['factura']['lectura_anterior'] = $lectura_medidor->lectura_inicial;
                 }
-                
             }
 
            
+            $precio = Precio::get()->last();
 
-
-            $precio = Precio::all()->toArray();
-            $dato['precio_metro'] = $precio[0]['precio_metro'];
-            $dato['cargo_fijo'] = $precio[0]['cargo_fijo'];
-
-
-
-
-
-
-           // dd($facturacion);
-
-
-
-            //
-            if(empty($facturacion->nombre)){ 
-                $dato['nombre'] = $cliente_medidor->nombre;
-                $dato['primer_apellido'] = $cliente_medidor->primer_apellido;
-            }else{ 
-                $dato['nombre'] = $facturacion->nombre;
-                $dato['primer_apellido'] = $facturacion->primer_apellido;
-            }
-
+            $dato['precio_metro'] = $precio->precio_metro;
+            $dato['cargo_fijo'] = $precio->cargo_fijo;
             
             
             //consumo
-            if(empty($facturacion->consumo)){$dato['consumo']=0;}else{$dato['consumo'] = $facturacion->consumo;}
-            //totalpagar
-            if(empty($facturacion->total_pagar)){$dato['total_pagar']=0;}else{$dato['total_pagar'] = $facturacion->total_pagar;}
-            //
-            if(empty($facturacion->id_medidor)){ $dato['id_medidor'] = $id_medidor; }else{ $dato['id_medidor'] = $facturacion->id_medidor; }
+            if(empty($ultima_facturacion->facturas->consumo)){
+                $dato['factura']->consumo =0;
+            }
 
-            if(empty($facturacion->documento)){$dato['documento'] = '';}else{ $dato['documento'] = $facturacion->documento;}
-            
-             
-              
-              //lectura
+            //totalpagar
+            if(empty($ultima_facturacion->facturas->total_pagar)){
+                $dato['total_pagar']=0;
+            }else{
+                $dato['total_pagar'] = $ultima_facturacion->facturas->total_pagar;
+            }
+
             if(empty($facturacion)){
                 if( empty($facturacion_temporal)){//medidor es nuevo
                     //medidor nuevo sin facturaciones anteriores
@@ -914,110 +820,23 @@ class MedicionController extends Controller
                      $dato['lectura'] = $lectura_medidor->lectura;
                 }
             }else{//este tiene una facturacion con el cliente activo
-                $dato['lectura'] = $facturacion->lectura;
+              //  $dato['lectura'] = $facturacion->lectura;
                 
 
             }
-                    
-                
-            
-              //fecha_factura
-              if(empty($facturacion->fecha_factura)){$dato['fecha_factura']='--/--/--';}else{$dato['fecha_factura'] = $facturacion->fecha_factura;}
-              //fecha limite
-              if(empty($facturacion->fecha_limite)){$dato['fecha_limite']='--/--/--';}else{$dato['fecha_limite'] = $facturacion->fecha_limite;}
-
-
-               if(empty($facturacion->id_cliente)){ $dato['id_cliente'] = $id_cliente; }else{$dato['id_cliente'] = $facturacion->id_cliente;}
-               //id_factura
-               if(empty($facturacion->id_factura)){$dato['id_factura']='null';}else{$dato['id_factura'] = $facturacion->id_factura;}
-               
-
-
-
-
-              if($dato['consumo']>11){
-                // dd($dato);
-                 $dato['metros_adicionales'] = $dato['consumo'] - 11;
-                 $dato['precio_normal'] = $dato['metros_adicionales'] * $dato['precio_metro'];
-                 $dato['valor_basico'] = 11 * $dato['precio_metro'];
-                 $dato['valor_consumo'] = $dato['valor_basico'] + $dato['precio_normal'];
-             }else{
-                  $dato['valor_basico'] = $dato['consumo'] * $dato['precio_metro'];
-                  $dato['valor_consumo'] = $dato['valor_basico'];
-                  $dato['precio_normal'] = 0;
-             }
-               $dato['subsidio_consumo'] = ($dato['valor_basico'] * $nivel[0]->porcentaje) / 100;
-               $total_consumo = $dato['valor_basico'] - $dato['subsidio_consumo'];
-                   //me havisa hola omme esta ..?
-
-
-
-                 // $subsidio_cons_tempo = $dato['valor_consumo'] - $valor_consumo_sub;
-
-                  //cargo fijo
-                  if($nivel[0]->tipo==11 || $nivel[0]->tipo==12){
-                    //  dd($nivel[0]->porcentaje);
-                  }
-                  $cargo_fijo = $precio[0]['cargo_fijo'];
-                  $subsidio_cargo = ($cargo_fijo * $nivel[0]->porcentaje) / 100;//30/110/0
-                  $subsidio_pagar_cargo = $cargo_fijo - $subsidio_cargo;///pagar   $/////00 7.800
-
-
-
-                  //dd($subsidio_cargo);
-                  //dd($valor_consumo);
-                //  $total = $subsidio_pagar + $subsidio_cons_t + $mts_precio_normal;
-                  $dato['subsidio_cargo'] = $subsidio_cargo;
-                  if($dato['id_factura']=='null'){
-                    $dato['total_temporal'] = 0;
-                  }else{
-                    $dato['total_temporal'] = $total_consumo + $dato['precio_normal'] + $subsidio_pagar_cargo;
-                  }
-                  
-
-
 
 
 
             array_push($lecturas, $dato);
 
+            //dd($lecturas);
+
 
             }
 
 
-
-/*
-
-
-
-
-
-            //facturas anteriores
-             $facturacion_anterior= DB::table('facturacion as fn')
-              ->join('factura as f','f.id','=','fn.id_factura')
-              ->join('medidor as m','m.id','=','fn.id_medidor')
-              ->where('fn.id_medidor','=',$_REQUEST['id_medidor'])
-             ->where('f.estado','=','1')
-              ->select('fn.id as id_facturacion','fn.*','f.*')->get();
-
-
-            $consumo_anterior = 0;
-            $acumulador = 0;
-            $id_ultima_facturacion = $facturacion->id_facturacion;
-
-            foreach ($facturacion_anterior as $key => $value) {
-                $id_factura_anterior = $value->id_facturacion;
-                if($id_factura_anterior <$id_ultima_facturacion){
-                    $acumulador = $acumulador + $value->total_pagar;
-                }
-            }*/
-
-
-
-
         return view('medicion.create',compact('lecturas'));
 
-        //dd($mediciones,$clientes);
 
     }
 
@@ -1169,9 +988,11 @@ class MedicionController extends Controller
       ->where('c.id','=',$id_cliente)
       ->select('*')->get();
 
-      $precio = Precio::where('estado','2')->select('*')->get();
-      $precio_metro = $precio[0]['precio_metro'];
-      $cargo_fijo =  $precio[0]['cargo_fijo'];
+      $precio = Precio::get()->last();
+      //dd($precio);
+      $precio_metro = $precio->precio_metro;
+      
+      $cargo_fijo =  $precio->cargo_fijo;
 
       if($consumo>11){
           // dd($dato);
@@ -1192,10 +1013,6 @@ class MedicionController extends Controller
       $subsidio_pagar_cargo = $cargo_fijo - $subsidio_cargo;///pagar   $/////00 7.800
 
 
-
-      //dd($subsidio_cargo);
-      //dd($valor_consumo);
-  //  $total = $subsidio_pagar + $subsidio_cons_t + $mts_precio_normal;
 
 
       $total_temporal = $valor_pagar_sub + $precio_normal + $subsidio_pagar_cargo;      //

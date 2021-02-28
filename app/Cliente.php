@@ -25,6 +25,6 @@ class Cliente extends Model
 
     public function niveles()
     {
-        return $this->hasMany('App\Nivel');
+        return $this->belongsTo(Nivel::class, 'id');
     }
 }

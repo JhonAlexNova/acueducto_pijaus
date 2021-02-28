@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Hash;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,4 +58,6 @@ Route::group(['prefix'=>'app','middleware'=>'auth'],function(){
 
 
 Route::get('update','AppController@update');
+
+Route::get('update_credito','AppController@update_creditos');
 
