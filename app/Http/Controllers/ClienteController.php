@@ -123,9 +123,9 @@ class ClienteController extends Controller
         //if($id_medidor){
             $cliente = new Cliente();
             $cliente->id_nivel = $request->id_nivel;
-            $cliente->nombre = $request->nombre;
-            $cliente->primer_apellido = $request->primer_apellido;
-            $cliente->segundo_apellido = $request->segundo_apellido;
+            $cliente->nombre = strtoupper($request->nombre);
+            $cliente->primer_apellido =  strtoupper($request->primer_apellido);
+            $cliente->segundo_apellido =  strtoupper($request->segundo_apellido);
             $cliente->documento = $request->documento;
             $cliente->telefono = $request->telefono;
             $cliente->direccion = $request->direccion;
@@ -194,9 +194,9 @@ class ClienteController extends Controller
         }elseif ($id_nivel==12 || $id_nivel==5) {
              $cliente->id_nivel=5;
         }
-        $cliente->nombre = $request->nombre;
-        $cliente->primer_apellido = $request->primer_apellido;
-        $cliente->segundo_apellido = $request->segundo_apellido;
+        $cliente->nombre =  strtoupper($request->nombre);
+        $cliente->primer_apellido =  strtoupper($request->primer_apellido);
+        $cliente->segundo_apellido =  strtoupper($request->segundo_apellido);
         $cliente->documento = $request->documento;
         $cliente->telefono = $request->telefono;
         $cliente->direccion = $request->direccion;

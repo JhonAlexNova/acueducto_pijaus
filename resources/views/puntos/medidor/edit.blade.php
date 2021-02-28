@@ -36,16 +36,16 @@
 
                             <div class="form-group col-md-4">
                                 <label for="name">Marca del Medidor</label>
-                            <input type="text" class="form-control text-capitalize" name="marca"  value='{{$medidor->marca}}' required>
+                            <input type="text" class="form-control " name="marca"  value='{{$medidor->marca}}' required>
                             </div>
                             <div class="form-group col-md-4">
                             <label for="apellido">#Serial</label>
-                            <input type="text" class="form-control text-capitalize" name="serial"  value='{{$medidor->serial}}' required>
+                            <input type="text" class="form-control" name="serial"  value='{{$medidor->serial}}' required>
                             </div>
                             <div class="form-group col-md-4">
                             <label for="">Predio</label>
                             <input type="hidden" name="id_punto" value="{{$punto->id}}">
-                            <input type="text" class="form-control text-capitalize" name="zona"  value='{{$punto->zona}}' required>
+                            <input type="text" class="form-control" name="zona"  value='{{$punto->zona}}' style="text-transform: uppercase;" required>
                             </div>
                         </div>
 

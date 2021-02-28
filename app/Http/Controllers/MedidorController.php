@@ -82,7 +82,7 @@ class MedidorController extends Controller
          $punto = PuntoAgua::find($id_punto);
         $medidor =  Medidor::find($id_medidor);
         // dd($punto);
-
+ 
         return view('puntos.medidor.edit', compact('medidor','punto'));
     }
 
@@ -104,7 +104,7 @@ class MedidorController extends Controller
             $medidores->save();
             //
             $punto = PuntoAgua::find($request->id_punto);
-            $punto->zona = $request->zona;
+            $punto->zona = strtoupper($request->zona);
             $punto->save();
             return back()->with('update_medidor', 'Medidor Actualizado');
         } elseif (!empty($id_medidor)) {//este condicional es para suspender el punto, el medidor, el cliente"en caso que solo tenga un solo punto".

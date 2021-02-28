@@ -27,15 +27,15 @@
 
                     <div class="form-group col-md-4">
                         <label for="name">Nombre del Usuario</label>
-                        <input type="text" class="form-control text-capitalize" name="nombre" placeholder="Ej: Juan" required>
+                        <input type="text" class="form-control " name="nombre" placeholder="Ej: Juan" style="text-transform: uppercase;" required>
                   </div>
                   <div class="form-group col-md-4">
                     <label for="apellido">Primer Apellido</label>
-                    <input type="text" class="form-control text-capitalize" name="primer_apellido" placeholder="Ej: Cruz" required>
+                    <input type="text" class="form-control" name="primer_apellido" placeholder="Ej: Cruz" style="text-transform: uppercase;" required>
                   </div>
                   <div class="form-group col-md-4">
                     <label for="">Segundo Apellido</label>
-                    <input type="text" class="form-control text-capitalize" name="segundo_apellido" placeholder="Ej: Rojas" required>
+                    <input type="text" class="form-control" name="segundo_apellido" placeholder="Ej: Rojas" style="text-transform: uppercase;" required>
                   </div>
                 </div>
 

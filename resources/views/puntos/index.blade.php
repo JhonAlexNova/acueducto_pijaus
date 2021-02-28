@@ -136,23 +136,23 @@
                                         <div class="form-group col-md-6 parte1">
                                             <input type="hidden" name="id_cliente" value="{{$cliente_ver->id}}">
                                             <label for="name">Marca del Medidor</label>
-                                            <input type="text" class="form-control text-capitalize" name="marca" >
+                                            <input type="text" class="form-control text-capitalize" name="marca" require>
                                             </div>
                                             <div class="form-group col-md-6 parte1">
                                             <label for="apellido">#Serial</label>
-                                            <input type="text" class="form-control text-capitalize" name="serial">
+                                            <input type="text" class="form-control text-capitalize" name="serial" required>
                                             </div>
 
                                             <div class="form-group col-md-6 parte1">
                                                 <label for="">Predio</label>
                                                 <input type="hidden" name="id_punto" >
-                                                <input type="text" class="form-control text-capitalize" name="zona">
+                                                <input type="text" class="form-control text-capitalize" name="zona" required>
                                            </div>
 
                                            <div class="form-group col-md-6 parte1">
                                                 <label for="">Lectura inicial</label>
                                                 <input type="hidden" name="id_punto" >
-                                                <input type="text" class="form-control text-capitalize" name="lectura_inicial" >
+                                                <input type="text" class="form-control text-capitalize" name="lectura_inicial" required>
                                             </div>
 
                                         <div class="col-md-12 parte2">
@@ -166,7 +166,7 @@
 
                                         <div class="col-md-12 parte2">
                                             <label for="">Zona</label>
-                                             <input type="text" class="form-control text-capitalize" name="zona_x" require>
+                                             <input type="text" class="form-control text-capitalize" name="zona_x" required>
                                         </div>
                                     </div>
                             </div>
@@ -209,8 +209,12 @@
         var el = $("input[type=radio]:checked").val();
         if(el==1){
             $('.parte1').show(); $('.parte2').hide();
+            $('.parte1 input').attr('required',true);
+            $('.parte2 input').removeAttr('required',false);
         }else{
             $('.parte1').hide(); $('.parte2').show();
+            $('.parte2 input').attr('required',true);
+            $('.parte1 input').removeAttr('required',false);
         }
         var id = 0;
         var action = "{{url('app/punto')}}/"+id;

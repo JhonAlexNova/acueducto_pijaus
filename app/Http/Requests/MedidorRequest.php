@@ -26,7 +26,8 @@ class MedidorRequest extends FormRequest
         return [
             'marca' => 'required',
             'serial' => 'required',
-            'lectura_inicial' => 'required'
+            'lectura_inicial' => 'required',
+            
         ];
     }
 }

@@ -35,15 +35,15 @@
 
                             <div class="form-group col-md-4">
                                 <label for="name">Nombre del Usuario</label>
-                            <input type="text" class="form-control text-capitalize" name="nombre" placeholder="Ej: Juan" value='{{$cliente_edit->nombre}}' required>
+                            <input type="text" class="form-control" name="nombre" placeholder="Ej: Juan" value='{{$cliente_edit->nombre}}' style="text-transform: uppercase;" required>
                             </div>
                             <div class="form-group col-md-4">
                             <label for="apellido">Primer Apellido</label>
-                            <input type="text" class="form-control text-capitalize" name="primer_apellido" placeholder="Ej: Cruz" value='{{$cliente_edit->primer_apellido}}' required>
+                            <input type="text" class="form-control " name="primer_apellido" placeholder="Ej: Cruz" value='{{$cliente_edit->primer_apellido}}' style="text-transform: uppercase;" required>
                             </div>
                             <div class="form-group col-md-4">
                             <label for="">Segundo Apellido</label>
-                            <input type="text" class="form-control text-capitalize" name="segundo_apellido" placeholder="Ej: Rojas" value='{{$cliente_edit->segundo_apellido}}' required>
+                            <input type="text" class="form-control " name="segundo_apellido" placeholder="Ej: Rojas" value='{{$cliente_edit->segundo_apellido}}' style="text-transform: uppercase;" required>
                             </div>
                         </div>
 

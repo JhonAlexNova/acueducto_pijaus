@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="row">
-	<div class="container">
+	<div class="container-fluid">
          <div class="justify-content-center">
             <div class="card text-center">
                 <div class="justify-content-center">
                         <div class="taba">
-                            <div class="col-md-12"><br>
+                            <div class="col-md-12" style="margin-bottom:5px"><br>
                                 <form action="">
                                         <div class="row">
                                             <div class="col-md-2">
@@ -16,13 +16,13 @@
                                             <div class="col-sm-12 col-md-2 col-lg-2">
                                                 <a href="#form-create" data-toggle="modal" class="btn btn-success btn-block btn-outline-success btn-sm">Nuevo</a>
                                             </div>
-                                            <div class="col-2"></div>
-                                            <div class="col-sm-5 col-md-4 col-lg-4" >
+                                            <div class="col-2" ></div>
+                                            <!-- <div class="col-sm-5 col-md-4 col-lg-4" >
                                                 @include('filtro.index')
                                             </div>
                                             <div class="col-sm-5 col-md-2 col-lg-2">
                                                 <button class="btn btn-primary btn-outline-primary btn-block btn-sm">Buscar</button>
-                                            </div>
+                                            </div> -->
                                             <div class="clearfix"></div>
 
                                         </div>
@@ -73,7 +73,12 @@
 <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready( function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'print', text: 'imprimir' }
+            ]
+        });
     });
 </script>
 

@@ -10,6 +10,7 @@ use App\Cliente;
 use App\PuntoAgua;
 use Illuminate\Http\Request;
 use App\Http\Requests\ClienteRequest;
+use App\Http\Requests\MedidorRequest;
 
 class PuntoAguaController extends Controller
 {
@@ -110,7 +111,7 @@ class PuntoAguaController extends Controller
      */
     public function update(Request $request, $puntoAgua)
     {
-
+        
         if($request->estado==1){
 
             $medidor = new Medidor();
@@ -127,7 +128,7 @@ class PuntoAguaController extends Controller
             $punto = new PuntoAgua();
             $punto->id_cliente = $request->id_cliente;
             $punto->id_medidor = $id_medidor;
-            $punto->zona = $request->zona;
+            $punto->zona = strtoupper($request->zona);
             $punto->estado = '1';
             $punto->save();
 
@@ -143,7 +144,7 @@ class PuntoAguaController extends Controller
             $punto = new PuntoAgua();
             $punto->id_medidor = $request->id_medidor;
             $punto->id_cliente = $request->id_cliente;
-            $punto->zona = $request->zona_x;
+            $punto->zona = strtoupper($request->zona_x);
             $punto->estado = '1';
             $punto->save();
 
