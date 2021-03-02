@@ -24,7 +24,7 @@
         ini_set("memory_limit",-1);
         ini_set('max_execution_time', 0);
         ?>
-        <div class="col-md-12 row align-items-center justify-content-center">
+        <div class="col-md-12 row align-items-center justify-content-center options">
             <a href="{{ url('app/medicion')}}" class="btn btn-outline-info btn-sm">Volver</a>
             <span class="border-left"></span>
             <button onclick="imprimir()" class="btn btn-outline-warning btn-sm">Imprimir</button>
@@ -701,6 +701,14 @@
 </div>
 
 
+<style>
+    .reset{
+        margin-left: 0 !important;
+    }
+    .color1{
+        background: #fff;
+    }
+</style>
 
 @if(!empty($_REQUEST['print']))
     <style>
@@ -714,7 +722,16 @@
 
 <script>
     function imprimir(){
+        $('.pcoded-content').addClass('reset');
+        $('nav, .options').hide();
+        $('.pcoded-main-container').addClass('color1');
         print();
+        setTimeout(()=>{
+           $('.pcoded-content').removeClass('reset');
+            $('nav, .options').show();
+            $('.pcoded-main-container').removeClass('color1');
+        },2000);
+        
     }
 </script>
 @endsection

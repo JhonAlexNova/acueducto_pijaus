@@ -196,8 +196,21 @@ tr.border-hidden {
 }
 
 .recibo td{
-    background: #f3f3f3 !important
+    background: #f3f3f3 !important;
+    white-space: revert !important;
 }
+
+
+.informacion-usuario {
+    padding: 0 0 0 0px;
+}
+
+.pcoded-container {
+    position: relative;
+    background: #fff !important;
+}
+
+
 
 
 .content-recibo {

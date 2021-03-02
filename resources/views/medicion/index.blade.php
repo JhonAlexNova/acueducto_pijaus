@@ -132,7 +132,7 @@
                     $mes = date('m');
                     $anno = date('yy');
 
-                    $mes = $mes - 1;
+                    $mes = $mes - 2;
 
                     if($mes==0){
                           $anno = $anno - 1;
@@ -148,7 +148,7 @@
                 <select name="mes_search" onchange="get_facturas()" class="form-control">
                     <option>Seleccionar mes...</option>
                     <?php 
-                        for ($i=1; $i <=2; $i++) { 
+                        for ($i=1; $i <=3; $i++) { 
                             if($mes>=1 && $mes<=9){$mes = '0'.$mes;}
                             echo "<option value='".$mes."'>".$mes."</option>";
                             $mes = $mes + 1;
@@ -205,7 +205,7 @@
 
     function get_facturas(){
         var mes = $('select[name=mes_search]').val();
-        var url = "generar_facturas?print=active&mes="+mes;
+        var url = "generar_facturas?mes="+mes;
         $('#search').attr('href',url);
     }
 </script>

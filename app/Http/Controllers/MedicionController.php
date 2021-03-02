@@ -48,7 +48,7 @@ class MedicionController extends Controller
 
          
 
-            // dd($mes);
+           //dd($anno);
 
         $facturacion_total = DB::table('facturacion as fn')
         ->join('factura as f','f.id','=','fn.id_factura')
@@ -56,7 +56,7 @@ class MedicionController extends Controller
         ->where('f.estado','=','1')
         //->where('f.periodo','=','03')
         ->where('f.periodo','=',$mes)
-        //->where('f.ano','=',$anno)
+        ->where('f.ano','=',$anno)
         ->select('fn.id_cliente','fn.otros','fn.id_medidor','f.id as id_factura','c.id','c.nombre','c.nombre','c.primer_apellido','c.segundo_apellido','c.documento','f.periodo','f.ano')->orderBy('fn.id','ASC')->get();
       //  dd($facturacion_total);
 
@@ -91,19 +91,36 @@ class MedicionController extends Controller
             ->where('c.estado','=','1')
             ->select('*')->get()->count();
 
+            ////////////////////////////////////////////////////////////////////////////////////
 
-            if($credito>0){
-                 $credito = DB::table('punto_agua as pt')
-                ->join('credito as c','c.id_punto_agua','=','pt.id')
-                ->where('pt.id_medidor','=',$id_medidor)
-                ->where('c.estado','=','1')
-                ->select('*')->get();
 
-                $dato['otros_cobros'] = $credito[0]->valor_cuota;
+        $creditos = DB::table('credito as cr')
+        ->join('punto_agua as pa','pa.id','cr.id_punto_agua')
+        ->join('medidor as m','m.id','pa.id_medidor')
+        ->where('cr.estado','=','1')
+        ->where('pa.id_medidor','=',$id_medidor)
+        ->select('*','m.id as id_medidor','cr.valor','cr.id as id_credito')->get()->last();
+
+        //dd($creditos);
+
+          $credito = array('saldo'=>0);
+          if(!empty($creditos)){
+            $pagos = PagoCredito::where('id_credito',$creditos->id_credito)->select()->get()->last();
+            if(!empty($pagos)){
+              $credito = array('saldo'=>$pagos->saldo);
             }else{
-              $dato['otros_cobros'] = 0;
+              $credito = array('saldo'=>$creditos->valor);
             }
-            
+          }else{
+           // dd('vacio');
+          }
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
+             $dato['otros_cobros'] = $credito['saldo'];
+
+
+           // dd($dato);
 
 
             //dd(count($credito));
@@ -146,7 +163,6 @@ class MedicionController extends Controller
             $id_ultima_facturacion = $facturacion->id_facturacion;
 
             foreach ($facturacion_anterior as $key => $value) {
-                
                 $id_factura_anterior = $value->id_facturacion;
                 if($id_factura_anterior <$id_ultima_facturacion){
                     $acumulador = $acumulador + $value->total_pagar;
@@ -171,7 +187,7 @@ class MedicionController extends Controller
 
             $id_temp = 0;
             $mes_actual = date('m');
-            $anno_actual = date('yy');
+            $anno_actual = date('Y');
             $mes_inicio_grafica = $mes_actual - 6;
             if($mes_inicio_grafica<=0){
                 $mes_inicio_grafica = 12 + ($mes_inicio_grafica);
