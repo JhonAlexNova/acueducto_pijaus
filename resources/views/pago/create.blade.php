@@ -2,16 +2,16 @@
 @extends('layouts.admin')
 @section('content')
 <div class="row">
-	<div class="container">
+	<div class="container-fluid">
 		<form action="">
 			<div class="row">
 				<div class="col-md-3">
 					  <a href="{{url('app')}}" class="btn btn-outline-info">Volver</a>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6" style="display: none">
 					@include('filtro.index')
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3" style="display: none">
 					<button class="btn btn-primary btn-outline-primary btn-block">Buscar</button>
 				</div>
 			</div>
@@ -20,7 +20,7 @@
             <div class="card text-center">
                 <div class="justify-content-center">
 					<div class="tabla">
-						<table class="table table-bordered table-striped table-condensed" id="myTable">
+						<table class="table table-bordered table-striped table-condensed" id="myTable" style="width: 100%">
 							<thead>
 								<tr>
 									<td>Nombre</td>
@@ -34,9 +34,9 @@
 								</tr>
 							</thead>
 							<tbody>
-		                       @foreach($clientes_f as $c)
-		                       @if($c->estado_factura == 1)
-									<tr>
+		                       @foreach($data as $key => $c)
+		                       	@if(!empty($c))
+		                       		<tr>
 										<td> {{$c->nombre}}  {{$c->primer_apellido}}  {{$c->segundo_apellido}} </td>
 										<td> {{$c->documento}} </td>
 										<td> {{$c->telefono}} </td>
@@ -46,8 +46,8 @@
 		                           		<td> {{ $c->zona}}</td>
 										<td style="width: 5%"><a href="{{url('app/pago',$c->id_medidor)}}" class="btn btn-outline-primary">Ver/Pagar</a></td>
 									</tr>
-
-									@endif
+		                       	@endif
+									
 		                       @endforeach
 							</tbody>
 						</table>

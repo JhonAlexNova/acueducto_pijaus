@@ -93,7 +93,7 @@
                             <thead class="cabecera-1">
                                 <tr>
                                     <td>
-                                        <img src="{{url('img/logo.png')}}" style="display: block;max-width: 80px;">
+                                        <img src="{{url('img/logo-color.png')}}" style="display: block;max-width: 80px;">
                                     </td>
                                     <td style="text-align: left !important; font-size: 12px">
                                         <span class="title">ACUEDUCTO VEREDA</span>   </br>

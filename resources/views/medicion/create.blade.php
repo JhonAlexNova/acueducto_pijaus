@@ -1,82 +1,66 @@
 
 @extends('layouts.admin')
 @section('content')
-
-<div class="card">
-	<div class="row options">
-		<div class="col-md-12">
-			<a href="{{url('app')}}" class="btn btn-outline-info">Volver</a>
-		</div>
-		<div class="col-md-12"><br>
-                <div class="modal-footer"></div>
-         </div>
-
-         <div class="col-md-12">
-         	<div class="tabla">
-				<table class="table table-bordered table-striped" id="myTable" style="width: 100%">
-					<thead>
-
-						<tr>
-							<td>Nombres</td>
-							<td>N° Documento</td>
-                            <td>Medidor</td>
-                            <td>Consumo</td>
-                            <td>Lectura anterior</td>
-							<td>Ultima lectura</td>
-							<td>Fecha factura</td>
-							<td>Fecha limite</td>
-							<td>Valor factura</td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach($lecturas as $key => $lectura)
-							<tr>
-								<td> {{ $lectura['user']->nombre }}  {{ $lectura['user']->primer_apellido }}  {{ $lectura['user']->segundo_apellido }}  </td>
-								<td> {{ $lectura['user']->documento }}  </td>
-								<td> {{ $lectura['medidor']->id }}  </td>
-								<td> {{ $lectura['factura']->consumo }}  </td>
-								<td> {{ $lectura['factura']->lectura_anterior }}  </td>
-								<td> {{ $lectura['factura']->lectura }}  </td>
-								<td> {{ $lectura['factura']->fecha_factura }}  </td>
-								<td> {{ $lectura['factura']->fecha_pago }}  </td>
-								<td> {{ $lectura['factura']->total_pagar }}  </td>
-								<td> 
-									<button type='button' onclick="eliminar_lectura('<?php echo $lectura['medidor']->id; ?>')" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
-								</td>
-
-                        		<td> 
-                        			<button type='button' onclick="editar_lectura('<?php echo $lectura['medidor']->id; ?>','<?php echo $lectura['factura']->lectura; ?>','<?php echo $lectura['factura']->fecha_factura ?>','<?php echo $lectura['factura']->id ?>')" class="btn btn-sm btn-outline-info"><i class="fa fa-edit"></i></button>
-                        		</td>
-                        		<td> 
-                        			<button type='button' onclick="getCliente('<?php echo $lectura['user']->id; ?>','<?php echo $lectura['medidor']->id; ?>')" class="btn btn-sm btn-outline-success"><i class="fa fa-plus"></i></button>
-                        		</td>
-							</tr>
-						@endforeach
-                       
-					</tbody>
-				</table>
-
-			</div>
-         </div>
-	</div>
-</div>
-
-
-
-
 <div class="row">
-	
-
-
-	<div class="container">
+	<div class="container-fluid">
 		<div class="justify-content-center">
-			
+			<form action="">
+				<div class="row">
+					<div class="col-md-6">
+						  <a href="{{url('app')}}" class="btn btn-outline-info">Volver</a>
+					</div>
+					<div class="col-sm-5 col-md-4 col-lg-4" >
+			            
+			        </div>
+			        <div class="col-sm-5 col-md-2 col-lg-2">
+			            
+			        </div>
+				</div>
+			</form>
             <div class="card text-center">
                 <div class="justify-content-center">
-					
+					<div class="tabla">
+							<table class="table table-bordered table-striped" id="myTable" style="width: 100%">
+								<thead>
+
+									<tr>
+										<td>Nombres</td>
+										<td>N° Documento</td>
+			                            <td>Medidor</td>
+			                            <td>Consumo</td>
+			                            <td>Lectura anterior</td>
+										<td>Ultima lectura</td>
+										<td>Fecha factura</td>
+										<td>Fecha limite</td>
+										<td>Valor factura</td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody>
+			                        @foreach ($lecturas as $l)
+			                        	<tr>
+			                        		<td> {{$l['nombre']}} {{$l['primer_apellido']}} </td>
+			                        		<td> {{$l['documento']}}  </td>
+			                        		<td> {{$l['id_medidor']}}  </td>
+			                        		<td> {{$l['consumo']}}  </td>
+			                        		<td> {{$l['lectura_anterior']}}  </td>
+			                        		<td> {{$l['lectura']}}  </td>
+			                        		<td> {{$l['fecha_factura']}}  </td>
+			                        		<td> {{$l['fecha_limite']}}  </td>
+			                        		<td> <?php echo number_format($l['factura']->total_pagar,0); ?>  </td>
+			                        		<td> <button type='button' onclick="eliminar_lectura('<?php echo $l['id_medidor']; ?>')" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+
+			                        		<td> <button type='button' onclick="editar_lectura('<?php echo $l['id_medidor']; ?>','<?php echo $l['lectura']; ?>','<?php echo $l['fecha_factura']; ?>','<?php echo $l['id_factura']; ?>')" class="btn btn-sm btn-outline-info"><i class="fa fa-edit"></i></button></td>
+			                        		<td> <button type='button' onclick="getCliente('<?php echo $l['id_cliente']; ?>','<?php echo $l['id_medidor']; ?>')" class="btn btn-sm btn-outline-success"><i class="fa fa-plus"></i></button></td>
+
+			                        	</tr>
+			                        @endforeach
+								</tbody>
+							</table>
+
+						</div>
                 </div>
             </div>
         </div>
@@ -140,19 +124,6 @@
 @endif
 
 <script>
-	get_lecturas();
-	function get_lecturas(){
-		$.ajax({
-			url:"{{ url('apis/lectura') }}?type=lecturas",
-			method:'get',
-			success:function(data){
-				
-			}
-		})
-	}
-
-
-
 	function editar_lectura(id_medidor, lectura, fecha, id_factura){
 		$('#form-edit').modal('show');
 		$('#form-edit input[name=lectura]').val(lectura);
@@ -222,6 +193,5 @@
     });
 </script>
 @endsection
-
 
 

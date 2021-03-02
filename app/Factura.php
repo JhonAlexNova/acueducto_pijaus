@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Factura extends Model
 {
     protected $table = 'factura';
-    protected $fillable = ['lectura','periodo','fecha_factura','fecha_pago','ano','estado','lectura_final','valor','consumo','total_pagar','updated_at'];
+    protected $fillable = ['lectura','periodo','fecha_factura','fecha_pago','ano','estado','lectura_final','valor','consumo','total_pagar','saldo_credito','updated_at'];
 
     public function facturaciones()
     {

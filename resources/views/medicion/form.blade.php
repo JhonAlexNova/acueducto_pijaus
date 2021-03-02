@@ -20,8 +20,8 @@
             <div class="col-md-6">
               <div class="form-group">
                 <?php 
-                  $fecha_act = date('yy-m-d');
-                  $fecha_min = date("yy-m-d",strtotime($fecha_act."- 15 days")); 
+                  $fecha_act = date('Y-m-d');
+                  $fecha_min = date("Y-m-d",strtotime($fecha_act."- 15 days")); 
                   
                  ?>
 

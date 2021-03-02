@@ -18,6 +18,8 @@
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{{ asset('template/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
 
+     <link rel="stylesheet" href="{{asset('lib/toastr/toastr.min.css')}}">
+
     <!-- feather Awesome -->
     <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
     <!-- Style.css -->
@@ -261,6 +263,7 @@
         }
     </style>
 
+    <script src="{{ asset('lib/toastr/toastr.min.js') }}"></script>
     
     <!-- Required Jquery -->
     <!-- script datatable buttons -->

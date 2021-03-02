@@ -10,6 +10,7 @@ use App\Nivel;
 use Illuminate\Http\Request;
 use DB;
 use Session;
+use App\PagoCredito;
 
 class PagoController extends Controller
 {
@@ -20,6 +21,7 @@ class PagoController extends Controller
      */
     public function index()
     {
+
         //clientes
         $clientes = DB::table('facturacion as fn')
         ->join('factura as f','f.id','=','fn.id_factura')
@@ -206,6 +208,8 @@ class PagoController extends Controller
      */
     public function create()
     {
+
+
         if(!empty($_REQUEST['buscar']) ){
              $clientes_f  =  DB::table('facturacion as fn')
             ->join('factura as f','f.id','fn.id_factura')
@@ -218,30 +222,44 @@ class PagoController extends Controller
             ->select('*','f.estado as estado_factura')->get();
             //dd($clientes_f);
         }else{
-         $anno = date('yy');
-         $mes = date('m') - 1;
-        if($mes==0){
-            $anno = $anno - 1;
-            $mes = 12;
-        }
-        if($mes>=1 && $mes<=9){
-            $mes = '0'.$mes;
+             $anno = date('Y');
+             $mes = date('m') - 1;
+            if($mes==0){
+                $anno = $anno - 1;
+                $mes = 12;
+            }
+            if($mes>=1 && $mes<=9){
+                $mes = '0'.$mes;
+            }
+
+
+
+                //
+            $puntos = DB::table('punto_agua as pt')
+            ->join('cliente as c','c.id','=','pt.id_cliente')
+            ->where('pt.estado','=','1')
+            ->select('pt.id_medidor')->get();
+
+            $data = array();
+            foreach ($puntos as $key => $punto) {
+                $clientes_f  =  DB::table('facturacion as fn')
+                ->join('factura as f','f.id','fn.id_factura')
+                ->join('cliente as c','c.id','=','fn.id_cliente')
+                ->join('nivel as n','n.id','=','c.id_nivel')
+                ->join('punto_agua as pt','pt.id_medidor','=','fn.id_medidor')
+                ->where('f.estado','=','1')
+                //->where('f.periodo','=',$mes)
+                ->where('f.ano','=',$anno)
+                ->where('fn.id_medidor',$punto->id_medidor)
+                ->select('*','f.estado as estado_factura')->get()->last();
+                array_push($data, $clientes_f);
+               // dd($clientes_f);
+            }                        
+             
         }
 
-          
-                        
-             $clientes_f  =  DB::table('facturacion as fn')
-            ->join('factura as f','f.id','fn.id_factura')
-            ->join('cliente as c','c.id','=','fn.id_cliente')
-            ->join('nivel as n','n.id','=','c.id_nivel')
-            ->join('punto_agua as pt','pt.id_medidor','=','fn.id_medidor')
-            ->where('f.estado','=','1')
-            ->where('f.periodo','=',$mes)
-            ->where('f.ano','=',$anno)
-            ->select('*','f.estado as estado_factura')->get();
-            //dd($clientes_f);
-        }
-        return view('pago.create',compact('clientes_f'));
+       
+        return view('pago.create',compact('data'));
     }
 
     /**
@@ -250,8 +268,13 @@ class PagoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+
+
     public function store(Request $request)
     { 
+
         date_default_timezone_set('America/Bogota');
         if(!$request->id_factura){
             return redirect()->back();
@@ -282,12 +305,57 @@ class PagoController extends Controller
 
 
 
+        //verificar si hay pago credito añadido
+        if(!empty($request->otros_cobros)){//verificar si mando un pago al credito
+          if($request->otros_cobros>0){
+              foreach ($credito as $key => $value) {//verifica si hay creditos de usuarios
+                $pagos = PagoCredito::where('id_credito',$value->id_credito)->select()->get()->last();//verifica si hay pagos
+                if(!empty($pagos)){//hay pagos
+                  if($pagos->saldo>=$request->otros_cobros){
+                      $saldo_nuevo = $pagos->saldo - $request->otros_cobros;
+                      $pago_credito = new PagoCredito();
+                      $pago_credito->id_credito = $pagos->id_credito;
+                      $pago_credito->valor = $request->otros_cobros;
+                      $pago_credito->saldo = $saldo_nuevo;
+                      $pago_credito->fecha = date('Y-m-d');
+                      $pago_credito->save();
 
-        foreach ($credito as $key => $value) {
-            if($value->id_credito==''){}else{
-               $id_credito = $value->id_credito; 
+                      if($value->valor==$request->otros_cobros){
+                          $credito_d = Credito::find($value->id_credito);
+                          $credito_d->estado = 2;
+                          $credito_d->save();
+                        }
+                  }else{
+                      Session::flash('error','¡!EL valor del credito supera al pendiente...!');
+                  }
+                }else{//es el primer abono
+                    if($value->valor>=$request->otros_cobros){
+                        $saldo_nuevo = $value->valor - $request->otros_cobros;
+                        $pago_credito = new PagoCredito();
+                        $pago_credito->id_credito = $value->id_credito;
+                        $pago_credito->valor = $request->otros_cobros;
+                        $pago_credito->saldo = $saldo_nuevo;
+                        $pago_credito->fecha = date('Y-m-d');
+                        $pago_credito->save();
+
+                        if($value->valor==$request->otros_cobros){
+                          $credito_d = Credito::find($value->id_credito);
+                          $credito_d->estado = 2;
+                          $credito_d->save();
+                        }
+                    }else{
+                      Session::flash('error','¡!EL valor del credito supera al pendiente...!');
+                    }
+                       
+                } 
+                
             }
+          }
         }
+
+
+
+
 
 
 
@@ -305,7 +373,7 @@ class PagoController extends Controller
             //dd($value);
             $valor_total = $valor_total + $valor;
             $factura = Factura::find($id_factura);
-            $factura->fecha_pago = date('yy-m-d');
+            $factura->fecha_pago = date('Y-m-d');
             if($id_factura==$id_ultima_facturacion){
                 $valor_total = $valor_total + $request->otros_cobros;
                  $factura->valor = $valor_total;
@@ -318,24 +386,7 @@ class PagoController extends Controller
            
         }
 
-        if($id_credito!=''){
-            $credito = Credito::find($id_credito);
-            $valor_restante = 0;
-            if($credito->valor_cuota > $request->otros_cobros){
-                $valor_restante =  $credito->valor_cuota - $request->otros_cobros;
-               $credito->valor_cuota =  $valor_restante;
-               $credito->save();
-            }elseif($credito->valor_cuota == $request->otros_cobros){
-                $credito = Credito::find($id_credito);
-                $credito->valor_cuota = 0;
-                $credito->estado = '2';
-                $credito->save();
 
-               // dd($credito);
-            }else{
-                Session::flash('error','¡!EL valor del credito supera al pendiente...!');
-            }
-        }
             
 
         Session::flash('success','¡!Pago realizado con exito!');
@@ -386,14 +437,36 @@ class PagoController extends Controller
         ->join('punto_agua as pa','pa.id','cr.id_punto_agua')
         ->join('medidor as m','m.id','pa.id_medidor')
         ->where('cr.estado','=','1')
-        ->select('*','m.id as id_medidor','cr.valor')->get();
+        ->where('pa.id_medidor','=',$id_medidor)
+        ->select('*','m.id as id_medidor','cr.valor','cr.id as id_credito')->get()->last();
+
+        //dd($creditos);
+
+        $credito = array('saldo'=>0);
+        if(!empty($creditos)){
+          $pagos = PagoCredito::where('id_credito',$creditos->id_credito)->select()->get()->last();
+          if(!empty($pagos)){
+            $credito = array('saldo'=>$pagos->saldo);
+          }else{
+            $credito = array('saldo'=>$creditos->valor);
+          }
+        }else{
+         // dd('vacio');
+        }
+
+       // dd($credito);
+
+
+
+
+        
 
         //dd($creditos);
         
         
 
         
-        return view('pago.list_pagos',compact('facturacion','creditos'));
+        return view('pago.list_pagos',compact('facturacion','credito'));
     }
 
     /**

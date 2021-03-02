@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row">
-	<div class="container">
+<section>
+	<div class="container_fluid">
 	<div class="row">
 		<div class="col-md-2">
 			  <a href="{{url('app/pago/create')}}" class="btn btn-outline-info">Volver</a>
@@ -11,12 +11,14 @@
 			{{-- <a href="{{url('app/generar_facturas')}}" class="btn btn-block btn-outline-success btn-sm" style="font-size: 11px">Descargar facturas</a> --}}
 		</div>
 	</div>
-	<div class="row justify-content-center">
-		<div class="col-12 col-md-12">
+
+
+	<div class="row">
+		<div class="col-md-12">
 				<div class="tabla">
 					<?php $otros_cobros = 0; ?>
 					@if(count($facturacion)>0)
-					<table class="table table-bordered table-striped" id="tabla-">
+					<table class="table table-bordered table-striped" id="tabla-" style="width: 100%">
 						<thead>
 
 							<tr>
@@ -33,11 +35,11 @@
 						<tbody>
 							<form action="{{route('pago.store')}}" method="post" name="form-pago">
 	                       		@foreach($facturacion as $f)
-						   			@foreach($creditos as $c)
-							   			@if($f->id_medidor==$c->id_medidor)
-											<?php $otros_cobros = $c->valor_cuota; ?>
-							   			@endif
-						   			@endforeach
+						   			@if (!empty($credito))
+						   				@php
+						   					$otros_cobros = $credito['saldo'];
+						   				@endphp
+						   			@endif
 								<tr>
 									<td> {{$f->periodo}} </td>
 									<td> {{$f->consumo}} M3</td>
@@ -77,7 +79,6 @@
 									   		 ?>
 									   </td>
 									   <td>
-									   		
 									   			{{csrf_field()}}
 									   			<input type="hidden" name="id_medidor" value="<?php echo $f->id_medidor;?>">
 									   			<input type="checkbox" name="id_factura[]" value="<?php echo $total_factura; echo "-".$f->id_factura; ?>">
@@ -111,7 +112,7 @@
                 </div>
 	</div>
 </div>
-</div>
+</section>
 
 
 <!---->
@@ -134,7 +135,7 @@
         	<div class="col-md-8">
         		<div class="form-group">
         			<span>Valor</span>
-        			<input type="number" name="valor" class="form-control" disabled="true" value="<?php echo $otros_cobros; ?>" min='0' max='<?php echo $otros_cobros; ?>' onchange="validar_cobro()">
+        			<input type="number" name="valor" class="form-control" disabled="true" value="<?php echo $otros_cobros; ?>" min='0' max='<?php echo $otros_cobros; ?>' onkeyup="validar_cobro()">
         		</div>
         	</div>
         	<div class="col-md-12">
@@ -150,7 +151,6 @@
   </div>
 </div>
 
-<!---->
 
 
 <script src="{{asset('js/controller/FacturaController.js')}}"></script>
@@ -180,12 +180,15 @@
 	}
 
 	function validar_cobro(){
-		var max =  $('input[name=valor]').attr('max');
-		var val =  $('input[name=valor]').val();
-		if(val>max){
-			var val =  $('input[name=valor]').val(max);
+		var max =   parseInt($('input[name=valor]').attr('max'));
+		var val =  parseInt($('input[name=valor]').val());
+		if(val<max){
+			console.log('menor');
+			$('input[name=otros_cobros]').val(val);
+		}else{
+			console.log('= o mayor');
+			$('input[name=otros_cobros]').val(max);
 		}
-		$('input[name=otros_cobros]').val(val);
 	}
 
 	function pago_confirma(){
