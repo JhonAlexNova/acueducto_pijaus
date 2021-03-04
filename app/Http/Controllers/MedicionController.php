@@ -39,17 +39,6 @@ class MedicionController extends Controller
           }
           $mes = intval($mes);
 
-        //  dd($mes);
-
-
-
-          
-
-
-         
-
-           //dd($anno);
-
         $facturacion_total = DB::table('facturacion as fn')
         ->join('factura as f','f.id','=','fn.id_factura')
         ->join('cliente as c','c.id','=','fn.id_cliente')
@@ -57,15 +46,16 @@ class MedicionController extends Controller
         //->where('f.periodo','=','03')
         ->where('f.periodo','=',$mes)
         ->where('f.ano','=',$anno)
+        //->where('fn.id_factura','>',3626)
         ->select('fn.id_cliente','fn.otros','fn.id_medidor','f.id as id_factura','c.id','c.nombre','c.nombre','c.primer_apellido','c.segundo_apellido','c.documento','f.periodo','f.ano')->orderBy('fn.id','ASC')->get();
       //  dd($facturacion_total);
 
 
-   // dd($facturacion_total);
+  // dd($facturacion_total);
 
     // dd($facturacion_total);
 
-        $clientes_f = Cliente::all();
+       // $clientes_f = Cliente::all();
         $consumo = array();
         $dato = array();
 
@@ -76,20 +66,13 @@ class MedicionController extends Controller
 
         foreach ($facturacion_total as $c) {
 
+          //dd($c);
+
            $id_cliente = $c->id_cliente;
            $id_factura = $c->id_factura;
            $id_medidor = $c->id_medidor;
 
 
-
-
-
-            //otros cobros
-            $credito = DB::table('punto_agua as pt')
-            ->join('credito as c','c.id_punto_agua','=','pt.id')
-            ->where('pt.id_medidor','=',$id_medidor)
-            ->where('c.estado','=','1')
-            ->select('*')->get()->count();
 
             ////////////////////////////////////////////////////////////////////////////////////
 
@@ -120,15 +103,6 @@ class MedicionController extends Controller
              $dato['otros_cobros'] = $credito['saldo'];
 
 
-           // dd($dato);
-
-
-            //dd(count($credito));
-
-
-          //  $dato['otros_cobros'] = $c->otros;
-
-            //ultima factura del medidor - >cliente
            $facturacion = DB::table('facturacion as fn')
             ->join('factura as f','f.id','=','fn.id_factura')
             ->join('medidor as m','m.id','=','fn.id_medidor')
@@ -164,7 +138,7 @@ class MedicionController extends Controller
 
             foreach ($facturacion_anterior as $key => $value) {
                 $id_factura_anterior = $value->id_facturacion;
-                if($id_factura_anterior <$id_ultima_facturacion){
+                if($id_factura_anterior <$id_ultima_facturacion){//acumulador facturas anteriores
                     $acumulador = $acumulador + $value->total_pagar;
                 }
             }
@@ -278,14 +252,22 @@ class MedicionController extends Controller
                 //Cantidad facturacion == 1 se obtiene la lectura inicial del la tabla medidor
                 $mes_ultima_facturacion = $facturacion->periodo;
                 $mes_facturacion_anterior = $mes_ultima_facturacion - 1;
-                $anno = date('yy');
 
-                if($mes_facturacion_anterior <=0){
-                   $sql_facturacion_anterior = 12;
+
+                $anno = date('Y');
+
+                if($mes_facturacion_anterior ==0){
+                   $mes_facturacion_anterior = 12;
                    $anno = $anno - 1;
                 }
 
-                if($mes_facturacion_anterior>=0 && $mes_facturacion_anterior<=9){$mes_facturacion_anterior = '0'.$mes_facturacion_anterior;}
+                //dd($mes_facturacion_anterior.'°'.$mes_ultima_facturacion.'|'.$anno);
+
+                //dd($facturacion);
+
+                //if($mes_facturacion_anterior>=0 && $mes_facturacion_anterior<=9){$mes_facturacion_anterior = '0'.$mes_facturacion_anterior;}
+
+                //dd($mes_facturacion_anterior);
 
                 $sql_facturacion_anterior = DB::table('facturacion as fn')
                 ->join('factura as f','f.id','=','fn.id_factura')
@@ -294,6 +276,7 @@ class MedicionController extends Controller
                 ->where('f.ano','=',$anno)
                 ->where('fn.id_medidor','=',$id_medidor)
                 ->select('f.lectura')->get();
+
                //dd($sql_facturacion_anterior[0]->lectura);
 
                 
@@ -303,6 +286,36 @@ class MedicionController extends Controller
                 }else{
                     $dato['lectura_anterior'] = $sql_facturacion_anterior[0]->lectura; 
                 }
+
+
+
+
+                ////////////////////////////////
+
+
+                //sql para verificar si el medidor tiene facturas anteriores si la facturacion con el cliente llego en vacio
+             $facturacion_anterior = DB::table('facturacion as fn')
+            ->join('factura as f','f.id','=','fn.id_factura')
+            ->join('medidor as m','m.id','=','fn.id_medidor')
+            ->where('fn.id_medidor','=',$id_medidor)
+            ->select('f.lectura')->get();
+            
+              $factura_anterior = count($facturacion_anterior) - 2;
+
+
+
+              if(!empty($facturacion_anterior[$factura_anterior]->lectura)){//
+                $dato['lectura_anterior'] = $facturacion_anterior[$factura_anterior]->lectura;
+              }else{
+                  //
+                  if(count($facturacion_anterior)==1){
+                     $lectura_medidor = Medidor::where('id','=',$id_medidor)->select('*')->get()->last();
+                      $dato['lectura_anterior'] = $lectura_medidor->lectura_inicial;
+                  }
+                  
+              }
+
+
                 //$lectura =  $medidor[0]->li;
                
                 $dato['lectura_actual'] = $facturacion->lectura;
@@ -358,24 +371,7 @@ class MedicionController extends Controller
                   $dato['subsidio_cargo'] = $subsidio_cargo;
                     $dato['total_temporal'] = $valor_pagar_sub + $dato['precio_normal'] + $subsidio_pagar_cargo;
 
-
-
-
-
-
-
-
             }
-
-
-
-
-
-
-
-
-
-
             array_push($consumo, $dato);
 
 
@@ -446,7 +442,7 @@ class MedicionController extends Controller
         //     $mes = '0'.$mes;
         // }
         // dd($mes);
-        dd();
+       // dd();
         $consumo = array();
         $dato = array();
 
@@ -1006,6 +1002,8 @@ class MedicionController extends Controller
      */
     public function store(FacturaRequest $request)
     {
+
+
         date_default_timezone_set('America/Bogota');
         //verificar facturas en el mismo mes
         $id_medidor = $request->id_medidor;
@@ -1087,13 +1085,6 @@ class MedicionController extends Controller
             $id_cliente = $ultima_medicion->id_cliente;
         }
 
-       
-        //dd($consumo);
-
-
-        //$ul_medicion = (int)$ultima_medicion[1];
-
-         //dd($ulti,_medicion);
 
         if(!empty($ultima_medicion->lectura)){
             if($request->lectura < $ultima_medicion->lectura){
@@ -1189,12 +1180,20 @@ class MedicionController extends Controller
         $saldo_credito = null;
         foreach ($creditos as $key => $credito) {//
             //verificar cuotas pagadas
+
+            //dump($credito);
             
             $abonos = PagoCredito::where('id_credito',$credito->id)->select('saldo')->get()->last();
-            $saldo_credito = $saldo_credito + $abonos->saldo;
+            if($abonos){
+                $saldo_credito = $saldo_credito + $abonos->saldo; 
+            }else{
+                $saldo_credito = $credito->valor;
+            }
+            
+            
         }
 
-
+        //dd($saldo_credito);
 
 
         $factura->lectura = $request->lectura;
@@ -1304,6 +1303,14 @@ class MedicionController extends Controller
               }
               $request['fecha_limite'] = strtotime($request->fecha_factura  ."+ 10 days");
               $request['fecha_limite'] = date("d-m-Y",$request['fecha_limite']);
+
+
+              //update facturacion
+              $facturacion = Facturacion::where('id_factura',$request->id_factura)->select('id')->get()->last();
+
+              $facturacion = Facturacion::find($facturacion->id);
+              $facturacion->fecha_limite = $request->fecha_limite;
+              $facturacion->save();
               //dd($request->all());
              // dd(date("d-m-Y",$request['fecha_limite']));
               //TOtal pgar

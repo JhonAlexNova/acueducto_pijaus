@@ -5,7 +5,7 @@
     var id;
     var valor;
     function pagar(id){
-        var action = 'http://127.0.0.1:8000/app/credito/'+id;
+        var action = '{{ url("app/credito") }}/'+id;
         $('#pago-credito').attr('action',action);
         $('input[name=id_credito]').val(id);
         $('#form-create').modal('show');
@@ -31,7 +31,7 @@
     }
 </script>
 <div class="row">
-	<div class="container">
+	<div class="container-fluid">
 
             <div class="row">
                 <div class="col-md-2">
@@ -45,57 +45,68 @@
 	<div class="row justify-content-center">
 		<div class="col-12 col-md-12">
 			<div class="tabla">
-				<table class="table table-bordered table-striped" id="myTable">
-					<thead>
+        @if(empty($data))
+          <div class="card" style="padding: 50px; text-align: center;">
+            <h2>Este medidor no tiene ningun credito asociado..</h2>
+          </div>
 
-						<tr>
-                            <td>#</td>
-							<td>Nombre</td>
-							<td>Primer Apellido</td>
-                            <td>Segundo Apellido</td>
-                            <td>Documento</td>
-                            <td>Valor Credito</td>
-                            <td>No de Cuotas</td>
-                            <td>Fecha de pago</td>
-							<td>Estado del Credito</td>
-                            <td colspan="3">Opciones</td>
+        @else
+          <table class="table table-bordered table-striped" id="myTable">
+                    <thead>
 
-						</tr>
-					</thead>
-					<tbody>
-                        @foreach ($credito as $credito)
-                        <tr>
+                      <tr>
+                        <td>#</td>
+                        <td>Nombre</td>
+                        <td>Primer Apellido</td>
+                        <td>Segundo Apellido</td>
+                        <td>Documento</td>
+                        <td>Valor Credito</td>
+                        <td>Saldo</td>
+                        <td>No de Cuotas</td>
+                        <td>Fecha de pago</td>
+                        <td>Estado del Credito</td>
+                        <td colspan="3">Opciones</td>
 
-                            <td>{{$credito->id_credito}}</td>
-                            <td>{{$credito->nombre}}</td>
-							<td>{{$credito->primer_apellido}}</td>
-							<td>{{$credito->segundo_apellido}}</td>
-							<td>{{$credito->documento}}</td>
-                            <td>{{$credito->valor_cuota}}</td>
-                            <td>{{$credito->cuota}}</td>
-                            <td>{{$credito->fecha_pago}}</td>
-                            @if ($credito->estado == 1)
-                                <td>Activo</td>
-                            @else
-                                <td>Cancelado</td>
-                            @endif
-                            <td>
-                                <a href="#" class="btn btn-outline-success" onclick="pagar('{{$credito->id_credito}}')">ABONO</a>
-                            </td>
-                            <td>
-                                 <a href="#" class="btn btn-outline-primary" onclick="editar('{{$credito->id_credito}}','{{$credito->valor_cuota}}')">Editar</a>
-                            </td>
-                            <td>
-                                 <a href="#" class="btn btn-outline-danger" onclick="eliminar('{{$credito->id_credito}}')">Eliminar</a>
-                            </td>
-                            
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
 
-						</tr>
-                        @endforeach
+                        <td>{{ $data['credito']->id  }}</td>
+                        <td>{{$data['credito']->nombre}}</td>
+                        <td>{{$data['credito']->primer_apellido}}</td>
+                        <td>{{$data['credito']->segundo_apellido}}</td>
+                        <td>{{$data['credito']->documento}}</td>
+                        <td>{{$data['credito']->valor}}</td>
+                        <td> {{ $data['saldo_credito'] }} </td>
+                        <td>{{$data['credito']->cuota}}</td>
+
+                        <td>{{$data['credito']->fecha_pago}}</td>
+                        @if ($data['credito']->estado == 1)
+                        <td>Activo</td>
+                        @else
+                        <td>Cancelado</td>
+                        @endif
+                        <td>
+                        <a href="#" class="btn btn-outline-success" onclick="pagar('{{$data['credito']->id_credito}}')">ABONO</a>
+                        </td>
+                        <td>
+                        <a href="#" class="btn btn-outline-primary" onclick="editar('{{$data['credito']->id_credito}}','{{$data['credito']->valor_cuota}}')">Editar</a>
+                        </td>
+                        <td>
+                        <a href="#" class="btn btn-outline-danger" onclick="eliminar('{{$data['credito']->id_credito}}')">Eliminar</a>
+                        </td>
 
 
-					</tbody>
-                </table>
+                      </tr>
+
+
+
+                    </tbody>
+                          </table>
+
+        @endif
+				
 
 
 	    </div>

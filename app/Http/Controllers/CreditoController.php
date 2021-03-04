@@ -11,6 +11,7 @@ use App\PuntoAgua;
 use PhpParser\Node\Expr\New_;
 use Session;
 use App\Facturacion;
+use App\PagoCredito;
 
 class CreditoController extends Controller
 {
@@ -24,6 +25,8 @@ class CreditoController extends Controller
         //dd('aca estpoy');
        
       //dd($creditos);
+
+
  
       if(!empty($_REQUEST['buscar'])){
           $creditos = DB::table('medidor as m')
@@ -47,14 +50,34 @@ class CreditoController extends Controller
     public function lista($id)
     {
         $punto = PuntoAgua::find($id);
-        $credito = DB::table('credito as cr')
-        ->join('cliente as cl','cl.id','=',$punto->id_cliente)
-        ->join('nivel as n','n.id','=','cl.id_nivel')
-        ->where('cr.id_punto_agua','=',$punto->id)
-          ->select('cr.*','cr.id as id_credito','n.tipo','cl.nombre','cl.primer_apellido','cl.segundo_apellido','cl.documento','cl.telefono')->get();
-                  // dd($credito);
 
-         return view('credito.detalles',compact('credito'));
+          $creditos = DB::table('punto_agua as pt')
+        ->join('credito as c','c.id_punto_agua','=','pt.id')
+        ->join('cliente as cl','cl.id','=','pt.id_cliente')
+        ->where('pt.id_medidor','=',$punto->id_medidor)
+        ->where('c.estado','=','1')
+        ->select('*','c.id as id_credito')->get();
+
+        $data = array();
+        $saldo_credito = 0;
+        foreach ($creditos as $key => $credito) {
+          $data['credito'] = $credito;
+          $data['valor'] = $credito->valor;
+         // dd($credito->id_credito);
+
+          $abonos = PagoCredito::where('id_credito',$credito->id_credito)->select('saldo')->get()->last();
+
+          if($abonos){
+            $data['saldo_credito'] = $abonos->saldo;
+          }else{
+             $data['saldo_credito'] = $credito->valor;
+          }
+        }
+
+        
+
+        //dd($data);
+         return view('credito.detalles',compact('data'));
 
     }
 
@@ -141,62 +164,6 @@ class CreditoController extends Controller
 
 
 
-    //     $periodo = substr($request->fecha,5,-3);
-    //     $anno = substr($request->fecha,0,-6);
-
-    //     $fecha = $anno.'-'.$periodo.'-27';
-    //     $request['fecha'] = $fecha;
-    //     if($periodo==12){
-    //         $periodo = '01';
-    //         $anno = $anno + 1;
-    //     }elseif($periodo<9){
-    //         $periodo = $periodo + 01; $periodo = '0'.$periodo;
-    //     }else{
-    //         $periodo = $periodo + 1;$periodo = ''.$periodo;
-    //     }
-
-    //     $fecha_pago = $anno.'-'.$periodo.'-25';
-    //     $valor_pagar = $request->valor/$request->cuotas;
-
-    //     $clientes = DB::table('credito as cr')
-    //     ->where('cr.id_cliente','=',$request->id_cliente)
-    //     ->select('*')->get();
-    //    //dd($request->id_cliente);
-    //     if(count($clientes)==0){
-    //        // dd('te creare');
-    //     }elseif($clientes[0]->estado==1){
-    //       // dd($clientes[0]->estado);
-    //        $estado=$clientes[0]->estado;
-    //        //dd($estado);
-    //        if ($estado==1) {
-    //            //dd('session');
-    //           Session::flash('rechazado','Ya tiene un Credito');
-    //           return redirect()->back();
-    //        }
-
-    //     }
-
-    //     $credito = New Credito();
-    //         $credito->id_cliente = $request->id_cliente;
-    //         $credito->valor = $request->valor;
-    //         $credito->cuotas = $request->cuotas;
-    //         $credito->fecha = $request->fecha;
-    //         $credito->estado = '1';
-    //         $credito->fecha_pago = $fecha_pago;
-    //         $credito->valor_cuota = $valor_pagar;
-    //         $credito->save();
-    //         Session::flash('credito_crear','Credito creado con exito.');
-    //         return redirect()->back();
-
-    //     //dd($clientes);
-
-    //     // dd($estado);
-    //     //dd($request->all());
-
-
-    //   if (!$clientes) {
-    //       dd('hola');
-    //   }
 
 
     }
@@ -209,6 +176,7 @@ class CreditoController extends Controller
      */
     public function show($id_punto)
     {
+
        $table = DB::table('credito')
        ->where('id_punto_agua','=',$id_punto)
        ->select('*')->get();
@@ -241,15 +209,32 @@ class CreditoController extends Controller
      * @param  \App\Credito  $credito
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $credito)
+    public function update(Request $request, $id)
     {
-        $credito = Credito::find($credito);
-        $valor_actual = $credito->valor;
-        $credito->valor = $valor_actual - $request->valor_abono;
-        $credito->valor_cuota = $valor_actual - $request->valor_abono;
+      //dd('salkdj');
+
+        $credito = Credito::find($id);
+
+         $abonos = PagoCredito::where('id_credito',$id)->select('saldo')->get()->last();
+          if(!empty($abonos)){
+            $valor_actual  = $abonos->saldo;
+          }else{
+             $valor_actual = $credito->valor;
+          }
 
 
-        if($valor_actual >= $request->valor_abono){
+
+
+         if($valor_actual >= $request->valor_abono){
+          
+          $saldo = $valor_actual - $request->valor_abono;
+          //dd($saldo);
+          $pago = new PagoCredito();
+          $pago->id_credito = $id;
+          $pago->valor = $request->valor_abono;
+          $pago->saldo = $saldo;
+          $pago->fecha = date('Y-m-d');
+          $pago->save();
           Session::flash('mensaje','Abono realizado con exito.');
   
         }else{
@@ -257,7 +242,15 @@ class CreditoController extends Controller
           return redirect()->back();
         }
 
-        if($credito->valor==0){
+        //dd('aca1');
+        
+        /*$credito->valor = $valor_actual - $request->valor_abono;
+        $credito->valor_cuota = $valor_actual - $request->valor_abono;¨*/
+
+
+        
+
+        if($saldo==0){
             $credito->estado = 2;
         }
 
