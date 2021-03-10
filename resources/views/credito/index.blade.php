@@ -41,6 +41,7 @@
                     </thead>
                     <tbody>
                         @foreach ($creditos as $cli)
+
                         <tr>
                             <td>{{$cli->id_medidor}}</td>
                             <td>{{$cli->nombre}}</td>
@@ -50,7 +51,7 @@
                             <td>{{$cli->zona}}</td>
                             <td>{{$cli->telefono}}</td>
                             <td style="width:2%"><button type="button" class="btn  btn-outline-success btn-sm" onclick="crear_credito('{{$cli->id_punto}}')" >Agregar Cobros</button></td>
-                            <td><a href="{{url('app/credito/lista',$cli->id_medidor)}}" class="btn  btn-outline-warning btn-sm">Detalles/Pagar</a></td>
+                            <td><a href="{{url('app/credito/lista',$cli->id_punto)}}" class="btn  btn-outline-warning btn-sm">Detalles/Pagar</a></td>
                         </tr>
                         @endforeach
 

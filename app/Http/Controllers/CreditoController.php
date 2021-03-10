@@ -50,6 +50,7 @@ class CreditoController extends Controller
     public function lista($id)
     {
         $punto = PuntoAgua::find($id);
+        //dd($punto);
 
           $creditos = DB::table('punto_agua as pt')
         ->join('credito as c','c.id_punto_agua','=','pt.id')
@@ -57,6 +58,8 @@ class CreditoController extends Controller
         ->where('pt.id_medidor','=',$punto->id_medidor)
         ->where('c.estado','=','1')
         ->select('*','c.id as id_credito')->get();
+
+       // dd($creditos);
 
         $data = array();
         $saldo_credito = 0;

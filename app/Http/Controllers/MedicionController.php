@@ -46,7 +46,7 @@ class MedicionController extends Controller
         //->where('f.periodo','=','03')
         ->where('f.periodo','=',$mes)
         ->where('f.ano','=',$anno)
-        //->where('fn.id_factura','>',3626)
+       // ->where('fn.id_factura','>',3876)
         ->select('fn.id_cliente','fn.otros','fn.id_medidor','f.id as id_factura','c.id','c.nombre','c.nombre','c.primer_apellido','c.segundo_apellido','c.documento','f.periodo','f.ano')->orderBy('fn.id','ASC')->get();
       //  dd($facturacion_total);
 
